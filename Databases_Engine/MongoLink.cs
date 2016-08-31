@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BHoM.Base;
 using BHoM.Global;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -56,6 +57,20 @@ namespace Mongo_Adapter
             depCollection.BulkWrite(depBulk, bulkOptions);
         }
 
+        public void SaveJson(IEnumerable<string> objects, string key = "")
+        {
+            // Create the bulk query for the object to replace/insert
+            List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
+            bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("Key", key)));
+            foreach (string obj in objects)
+                bulk.Add(new InsertOneModel<BsonDocument>(ToBson(obj, key)));
+
+            // Send that query
+            BulkWriteOptions bulkOptions = new BulkWriteOptions();
+            bulkOptions.IsOrdered = true;
+            collection.BulkWrite(bulk, bulkOptions);
+        }
+
         public void DeleteObjects(string filterString)
         {
             FilterDefinition<BsonDocument> filter = filterString;
@@ -86,9 +101,26 @@ namespace Mongo_Adapter
             return ret;
         }
 
+        public IEnumerable<string> GetJson(string filterString)
+        {
+            // Add the queried objects to a temp project
+            Project tempProject = new Project();
+            FilterDefinition<BsonDocument> filter = filterString;
+            var result = collection.Find(filter);
+            return result.ToList().Select(x => x.ToString());
+        }
+
         private BsonDocument ToBson(BHoMObject obj, string key)
         {
             var document = BsonDocument.Parse(obj.ToJSON());
+            if (key != "")
+                document["Key"] = key;
+            return document;
+        }
+
+        private BsonDocument ToBson(string obj, string key)
+        {
+            var document = BsonDocument.Parse(obj);
             if (key != "")
                 document["Key"] = key;
             return document;
