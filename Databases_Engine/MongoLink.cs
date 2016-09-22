@@ -23,6 +23,25 @@ namespace Mongo_Adapter
             depCollection = database.GetCollection<BsonDocument>(collectionName + "__dep");
         }
 
+        public string ServerLink
+        {
+            get
+            {
+                MongoServerAddress server = collection.Database.Client.Settings.Server;
+                return "mongodb://" + server.ToString();
+            }
+        }
+
+        public string DatabaseName
+        {
+            get { return collection.Database.DatabaseNamespace.DatabaseName;  }
+        }
+
+        public string CollectionName
+        {
+            get { return collection.CollectionNamespace.CollectionName;  }
+        }
+
         public void SaveObjects(IEnumerable<BHoMObject> objects, string key = "")
         {
             // Create the bulk query for the object to replace/insert
@@ -40,6 +59,7 @@ namespace Mongo_Adapter
             Dictionary<Guid, BHoMObject> dependencies = new Dictionary<Guid, BHoMObject>();
             foreach (BHoMObject bhomObject in objects)
             {
+                if (bhomObject == null) continue;
                 foreach (KeyValuePair<Guid, BHoMObject> kvp in bhomObject.GetDeepDependencies())
                 {
                     if (!dependencies.ContainsKey(kvp.Key))
@@ -90,7 +110,11 @@ namespace Mongo_Adapter
             var result = collection.Find(filter);
             var ret = result.ToList().Select(x => BHoMObject.FromJSON(x.ToString(), tempProject));
             foreach (BHoMObject obj in ret)
-                tempProject.AddObject(obj);
+            {
+                if (obj != null)
+                    tempProject.AddObject(obj);
+            }
+                
 
             // Sort out the dependencies
             var deps = depCollection.Find<BsonDocument>(Builders<BsonDocument>.Filter.In("Properties.BHoM_Guid", tempProject.GetTaskValues()));
