@@ -104,6 +104,7 @@ namespace Mongo_Adapter
 
         private BsonDocument ToBson(object obj, string key)
         {
+            if (obj is string) return ToBson(obj as string, key);
             var document = BsonDocument.Parse(BHoM.Base.JSONWriter.Write(obj));  
             if (key != "")
                 document["__Key__"] = key;
