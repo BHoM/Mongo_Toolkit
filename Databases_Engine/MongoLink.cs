@@ -124,7 +124,8 @@ namespace Mongo_Adapter
 
         private object FromBson(BsonDocument bson)
         {
-            return BHoM.Base.JsonReader.ReadObject(bson.ToString());
+            MongoDB.Bson.IO.JsonWriterSettings writerSettings = new MongoDB.Bson.IO.JsonWriterSettings { OutputMode = MongoDB.Bson.IO.JsonOutputMode.Strict };
+            return BHoM.Base.JsonReader.ReadObject(bson.ToJson(writerSettings));
         }
 
     }
