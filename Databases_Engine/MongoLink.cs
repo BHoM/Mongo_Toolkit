@@ -54,7 +54,7 @@ namespace Mongo_Adapter
             // Create the bulk query for the object to replace/insert
             List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
             bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Key__", key)));
-            foreach (string obj in objects)
+            foreach (object obj in objects)
                 bulk.Add(new InsertOneModel<BsonDocument>(ToBson(obj, key)));
 
             // Send that query
