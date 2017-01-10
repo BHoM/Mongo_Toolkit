@@ -7,23 +7,24 @@ using BHoM.Base;
 using BHoM.Global;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using BHoM.Databases;
 
 namespace Mongo_Adapter
 {
-    public class MongoLink
+    public class MongoLink : IDatabaseAdapter
     {
         private IMongoCollection<BsonDocument> collection;
-        private IMongoCollection<BsonDocument> depCollection;
 
         public MongoLink(string serverLink = "mongodb://localhost:27017", string databaseName = "project", string collectionName = "bhomObjects")
         {
             var mongo = new MongoClient(serverLink);
             IMongoDatabase database = mongo.GetDatabase(databaseName);
             collection = database.GetCollection<BsonDocument>(collectionName);
-            depCollection = database.GetCollection<BsonDocument>(collectionName + "__dep");
         }
 
-        public string ServerLink
+        /*******************************************/
+
+        public string ServerName
         {
             get
             {
@@ -32,56 +33,27 @@ namespace Mongo_Adapter
             }
         }
 
+        /*******************************************/
+
         public string DatabaseName
         {
             get { return collection.Database.DatabaseNamespace.DatabaseName;  }
         }
+
+        /*******************************************/
 
         public string CollectionName
         {
             get { return collection.CollectionNamespace.CollectionName;  }
         }
 
-        public void SaveObjects(IEnumerable<BHoMObject> objects, string key = "")
+        /*******************************************/
+
+        public bool Push(IEnumerable<object> objects, string key, List<string> tags = null)
         {
             // Create the bulk query for the object to replace/insert
             List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
-            bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("Key", key)));
-            foreach (BHoMObject obj in objects)
-                bulk.Add(new InsertOneModel<BsonDocument>(ToBson(obj, key)));
-
-            // Send that query
-            BulkWriteOptions bulkOptions = new BulkWriteOptions();
-            bulkOptions.IsOrdered = true;
-            collection.BulkWrite(bulk, bulkOptions);
-
-            // Get all the dependencies
-            Dictionary<Guid, BHoMObject> dependencies = new Dictionary<Guid, BHoMObject>();
-            foreach (BHoMObject bhomObject in objects)
-            {
-                if (bhomObject == null) continue;
-                foreach (KeyValuePair<Guid, BHoMObject> kvp in bhomObject.GetDeepDependencies())
-                {
-                    if (!dependencies.ContainsKey(kvp.Key))
-                        dependencies[kvp.Key] = kvp.Value;
-                }
-            }
-
-            // Create the bulk query for the dependencies to replace/insert
-            List<WriteModel<BsonDocument>> depBulk = new List<WriteModel<BsonDocument>>();
-            depBulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("Key", key)));
-            foreach (BHoMObject obj in dependencies.Values)
-                depBulk.Add(new InsertOneModel<BsonDocument>(ToBson(obj, key)));
-
-            // Send that query
-            depCollection.BulkWrite(depBulk, bulkOptions);
-        }
-
-        public void SaveJson(IEnumerable<string> objects, string key = "")
-        {
-            // Create the bulk query for the object to replace/insert
-            List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
-            bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("Key", key)));
+            bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Key__", key)));
             foreach (string obj in objects)
                 bulk.Add(new InsertOneModel<BsonDocument>(ToBson(obj, key)));
 
@@ -89,65 +61,71 @@ namespace Mongo_Adapter
             BulkWriteOptions bulkOptions = new BulkWriteOptions();
             bulkOptions.IsOrdered = true;
             collection.BulkWrite(bulk, bulkOptions);
+            return true;
         }
 
-        public void DeleteObjects(string filterString)
+        /*******************************************/
+
+        public bool Delete(string filterString = "{}")
         {
             FilterDefinition<BsonDocument> filter = filterString;
             collection.DeleteMany(filter);
+            return true;
         }
 
-        public void Clear()
-        {
-            collection.DeleteMany(new BsonDocument());
-        }
+        /*******************************************/
 
-        public IEnumerable<BHoMObject> GetObjects(string filterString)
+        public List<object> Pull(string filterString = "{}", bool keepAsString = false)
         {
-            // Add the queried objects to a temp project
-            Project tempProject = new Project();
             FilterDefinition<BsonDocument> filter = filterString;
-            var result = collection.Find(filter);
-            var ret = result.ToList().Select(x => BHoMObject.FromJSON(x.ToString(), tempProject));
-            foreach (BHoMObject obj in ret)
-            {
-                if (obj != null)
-                    tempProject.AddObject(obj);
-            }
-                
-
-            // Sort out the dependencies
-            var deps = depCollection.Find<BsonDocument>(Builders<BsonDocument>.Filter.In("Properties.BHoM_Guid", tempProject.GetTaskValues()));
-            foreach( BsonDocument doc in deps.ToList())
-                tempProject.AddObject(BHoMObject.FromJSON(doc.ToString(), tempProject));
-            tempProject.RunTasks();
-
-            return ret;
+            List<BsonDocument> result = collection.Find(filter).ToList();
+            if (keepAsString)
+                return result.Select(x => x.ToString()).ToList<object>();
+            else
+                return result.Select(x => FromBson(x)).ToList<object>();
         }
 
-        public IEnumerable<string> GetJson(string filterString)
+        /*******************************************/
+
+        public List<object> Query(List<string> queryStrings = null, bool keepAsString = false)
         {
-            // Add the queried objects to a temp project
-            Project tempProject = new Project();
-            FilterDefinition<BsonDocument> filter = filterString;
-            var result = collection.Find(filter);
-            return result.ToList().Select(x => x.ToString());
+            var pipeline = queryStrings.Select(s => BsonDocument.Parse(s)).ToList();
+            List<BsonDocument> result = collection.Aggregate<BsonDocument>(pipeline).ToList();
+            if (keepAsString)
+                return result.Select(x => x.ToString()).ToList<object>();
+            else
+                return result.Select(x => FromBson(x)).ToList<object>();
         }
 
-        private BsonDocument ToBson(BHoMObject obj, string key)
+
+        /*******************************************/
+        /****  Private Helper Methods           ****/
+        /*******************************************/
+
+        private BsonDocument ToBson(object obj, string key)
         {
-            var document = BsonDocument.Parse(obj.ToJSON());
+            var document = BsonDocument.Parse(BHoM.Base.JSONWriter.Write(obj));  
             if (key != "")
-                document["Key"] = key;
+                document["__Key__"] = key;
             return document;
         }
+
+        /*******************************************/
 
         private BsonDocument ToBson(string obj, string key)
         {
             var document = BsonDocument.Parse(obj);
             if (key != "")
-                document["Key"] = key;
+                document["__Key__"] = key;
             return document;
         }
+
+        /*******************************************/
+
+        private object FromBson(BsonDocument bson)
+        {
+            return BHoM.Base.JsonReader.ReadObject(bson.ToString());
+        }
+
     }
 }
