@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="MongoLink_Old.cs" />
     <Compile Include="MongoLink.cs" />
+    <Compile Include="MongoServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />

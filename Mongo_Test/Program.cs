@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Mongo_Adapter;
+using System.IO;
 
 namespace Mongo_Test
 {
@@ -11,6 +12,20 @@ namespace Mongo_Test
     {
         static void Main(string[] args)
         {
+            AutoStart();
+
+            Console.Read();
+        }
+
+        static void AutoStart()
+        {
+
+            MongoServer server = new MongoServer(@"C:\Users\adecler\Documents\Mongo\Test_02");
+            List<string> databases = server.GetAllDatabases();
+        }
+
+        static void OldTest()
+        { 
             MongoLink link = new MongoLink(@"mongodb://risktool-user:Happold123!@ds040309.mlab.com:40309/risktool-bh", "risktool-bh", "projects");
 
             string findQuery = "{name: \"London\"}";

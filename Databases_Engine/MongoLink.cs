@@ -8,18 +8,20 @@ using BHoM.Global;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using BHoM.Databases;
+using System.IO;
 
 namespace Mongo_Adapter
 {
     public class MongoLink : IDatabaseAdapter
     {
-        private IMongoCollection<BsonDocument> collection;
+        private MongoClient m_Client;
+        private IMongoCollection<BsonDocument> m_Collection;
 
         public MongoLink(string serverLink = "mongodb://localhost:27017", string databaseName = "project", string collectionName = "bhomObjects")
         {
-            var mongo = new MongoClient(serverLink);
-            IMongoDatabase database = mongo.GetDatabase(databaseName);
-            collection = database.GetCollection<BsonDocument>(collectionName);
+            m_Client = new MongoClient(serverLink);
+            IMongoDatabase database = m_Client.GetDatabase(databaseName);
+            m_Collection = database.GetCollection<BsonDocument>(collectionName);
         }
 
         /*******************************************/
@@ -28,7 +30,7 @@ namespace Mongo_Adapter
         {
             get
             {
-                MongoServerAddress server = collection.Database.Client.Settings.Server;
+                MongoServerAddress server = m_Collection.Database.Client.Settings.Server;
                 return "mongodb://" + server.ToString();
             }
         }
@@ -37,22 +39,25 @@ namespace Mongo_Adapter
 
         public string DatabaseName
         {
-            get { return collection.Database.DatabaseNamespace.DatabaseName;  }
+            get { return m_Collection.Database.DatabaseNamespace.DatabaseName;  }
         }
 
         /*******************************************/
 
         public string CollectionName
         {
-            get { return collection.CollectionNamespace.CollectionName;  }
+            get { return m_Collection.CollectionNamespace.CollectionName;  }
         }
 
         /*******************************************/
 
         public bool Push(IEnumerable<object> objects, string key, List<string> tags = null)
         {
+            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                return false;
+
             // Create the bulk query for the object to replace/insert
-            List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
+                List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
             bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Key__", key)));
             foreach (object obj in objects)
                 bulk.Add(new InsertOneModel<BsonDocument>(ToBson(obj, key)));
@@ -60,7 +65,7 @@ namespace Mongo_Adapter
             // Send that query
             BulkWriteOptions bulkOptions = new BulkWriteOptions();
             bulkOptions.IsOrdered = true;
-            collection.BulkWrite(bulk, bulkOptions);
+            m_Collection.BulkWrite(bulk, bulkOptions);
             return true;
         }
 
@@ -68,8 +73,11 @@ namespace Mongo_Adapter
 
         public bool Delete(string filterString = "{}")
         {
+            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                return false;
+
             FilterDefinition<BsonDocument> filter = filterString;
-            collection.DeleteMany(filter);
+            m_Collection.DeleteMany(filter);
             return true;
         }
 
@@ -77,8 +85,11 @@ namespace Mongo_Adapter
 
         public List<object> Pull(string filterString = "{}", bool keepAsString = false)
         {
+            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                return new List<object>();
+
             FilterDefinition<BsonDocument> filter = filterString;
-            List<BsonDocument> result = collection.Find(filter).ToList();
+            List<BsonDocument> result = m_Collection.Find(filter).ToList();
             if (keepAsString)
                 return result.Select(x => x.ToString()).ToList<object>();
             else
@@ -89,8 +100,11 @@ namespace Mongo_Adapter
 
         public List<object> Query(List<string> queryStrings = null, bool keepAsString = false)
         {
+            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                return new List<object>();
+
             var pipeline = queryStrings.Select(s => BsonDocument.Parse(s)).ToList();
-            List<BsonDocument> result = collection.Aggregate<BsonDocument>(pipeline).ToList();
+            List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline).ToList();
             if (keepAsString)
                 return result.Select(x => x.ToString()).ToList<object>();
             else
