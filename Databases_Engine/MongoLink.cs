@@ -139,11 +139,11 @@ namespace Mongo_Adapter
 
         /*******************************************/
 
-        public List<string> GetHistoryTimes()
+        /*public List<string> GetHistoryTimes()
         {
             List<object> times = Query(new List<string> { "{$group: {_id: \"$__Time__\"}}", "{$sort: {_id: -1}}" });
 
-        }
+        }*/
 
         /*******************************************/
         /****  Private Helper Methods           ****/
