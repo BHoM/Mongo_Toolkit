@@ -13,7 +13,7 @@ using System.IO;
 
 namespace Mongo_Adapter
 {
-    public class MongoLink : IDatabaseAdapter
+    public class MongoLink : IDatabaseCollectionAdapter
     {
         private MongoClient m_Client;
         private IMongoCollection<BsonDocument> m_Collection;
