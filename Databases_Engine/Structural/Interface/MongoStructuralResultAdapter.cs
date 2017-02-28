@@ -75,12 +75,13 @@ namespace Mongo_Adapter.Structural.Interface
                 if (nameString != null)
                     queryStrings.Add(nameString);
             }
-            queryStrings.Add(GetSortString());
+            //queryStrings.Add(GetSortString());
             return queryStrings;
         }
 
         private Dictionary<string, IResultSet> GetResultSet<T>(List<T> values, ResultOrder resultOrder) where T : IResult, new()
         {
+            values.Sort();
             Dictionary<string, IResultSet> results = new Dictionary<string, IResultSet>();
             IResultSet rSet = null;// new ResultSet<T>();
             if (resultOrder == ResultOrder.None)
