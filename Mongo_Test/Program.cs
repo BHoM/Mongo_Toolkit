@@ -12,7 +12,8 @@ namespace Mongo_Test
     {
         static void Main(string[] args)
         {
-            AutoStart();
+            // Test commit 1
+            AutoStart(); 
 
             Console.Read();
         }
