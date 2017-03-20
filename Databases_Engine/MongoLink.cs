@@ -130,11 +130,43 @@ namespace Mongo_Adapter
                 return new List<object>();
 
             var pipeline = queryStrings.Select(s => BsonDocument.Parse(s)).ToList();
-            List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline).ToList();
+
+            var aggregateOptions = new AggregateOptions();
+            aggregateOptions.AllowDiskUse = true;
+
+            List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
             if (keepAsString)
                 return result.Select(x => x.ToString()).ToList<object>();
             else
                 return result.Select(x => FromBson(x)).ToList<object>();
+        }
+
+        /*******************************************/
+
+        public bool MoveCollection(MongoLink other, bool replaceContent = true)
+        {
+            try
+            {
+                //Access the admin namespace and admin db needed to be able to rename collections
+                var adminDBNameSpace = DatabaseNamespace.Admin;
+                var adminDb = m_Client.GetDatabase(adminDBNameSpace.DatabaseName);
+
+                //Create the renaming command
+                Command<BsonDocument> command = "{ renameCollection: \"" +
+                                                this.DatabaseName + "." + this.CollectionName +
+                                                "\", to:\"" +
+                                                other.DatabaseName + "." + other.CollectionName +
+                                                "\", dropTarget:\"" + replaceContent.ToString() + "\"}";
+
+                //Execute command
+                adminDb.RunCommand(command);
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
         }
 
         /*******************************************/
