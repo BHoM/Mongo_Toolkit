@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -184,7 +185,15 @@ namespace Mongo_Adapter
         private BsonDocument ToBson(object obj, string key, DateTime timestamp)
         {
             if (obj is string) return ToBson(obj as string, key, timestamp);
-            var document = BsonDocument.Parse(BHoM.Base.JSONWriter.Write(obj));  
+            var json = BHoM.Base.JSONWriter.Write(obj);
+            string fullJson;
+
+            if (obj is IList)
+                fullJson = "{\"__Type__\": \"List`1\", \"Content\" :" + json + "}";
+            else
+                fullJson = json;
+
+            var document = BsonDocument.Parse(fullJson);  
             if (key != "")
             {
                 document["__Key__"] = key;
@@ -214,7 +223,24 @@ namespace Mongo_Adapter
         private object FromBson(BsonDocument bson)
         {
             MongoDB.Bson.IO.JsonWriterSettings writerSettings = new MongoDB.Bson.IO.JsonWriterSettings { OutputMode = MongoDB.Bson.IO.JsonOutputMode.Strict };
-            return BHoM.Base.JsonReader.ReadObject(bson.ToJson(writerSettings));
+
+            BsonElement elem;
+            
+            if (bson.TryGetElement("__Type__", out elem) && elem.Value.AsString == "List`1")
+            {
+                if (bson.TryGetElement("Content", out elem))
+                {
+                    if (elem.Value.IsBsonArray)
+                        return elem.Value.AsBsonArray.Select(x => BHoM.Base.JsonReader.ReadObject(x.ToJson(writerSettings))).ToList();
+                    else
+                        return new List<object> { BHoM.Base.JsonReader.ReadObject(elem.ToJson(writerSettings)) };
+                }
+                else return new List<object>();
+            }
+            else
+            {
+                return BHoM.Base.JsonReader.ReadObject(bson.ToJson(writerSettings));
+            }
         }
 
     }
