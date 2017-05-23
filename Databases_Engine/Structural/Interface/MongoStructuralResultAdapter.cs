@@ -111,7 +111,7 @@ namespace Mongo_Adapter.Structural.Interface
 
         public bool GetResult<T>(string collection, List<string> ids, List<string> cases, ResultOrder orderBy, out Dictionary<string, IResultSet> results) where T:class, IResult, new()
         {
-            List<object> objs = m_database.Query(collection, GetLoadcaseAndNameQueryString(cases, ids));
+            List<object> objs = m_database.QueryParallelOrdered(collection, GetLoadcaseAndNameQueryString(cases, ids));
             if (objs == null)
             {
                 results = new Dictionary<string, IResultSet>();

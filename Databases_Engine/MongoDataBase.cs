@@ -71,6 +71,17 @@ namespace Mongo_Adapter
             return link.Query(queryStrings, keepAsString);
         }
 
+        public List<object> QueryParallel(string collection, List<string> queryStrings = null, bool keepAsString = false)
+        {
+            MongoLink link = GetLink(collection);
+            return link.QueryParallel(queryStrings, keepAsString);
+        }
+
+        public List<object> QueryParallelOrdered(string collection, List<string> queryStrings = null, bool keepAsString = false)
+        {
+            MongoLink link = GetLink(collection);
+            return link.QueryParallelOrdered(queryStrings, keepAsString);
+        }
 
     }
 }

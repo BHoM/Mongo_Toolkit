@@ -144,6 +144,46 @@ namespace Mongo_Adapter
 
         /*******************************************/
 
+
+        public List<object> QueryParallel(List<string> queryStrings = null, bool keepAsString = false)
+        {
+            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                return new List<object>();
+
+            var pipeline = queryStrings.Select(s => BsonDocument.Parse(s)).ToList();
+
+            var aggregateOptions = new AggregateOptions();
+            aggregateOptions.AllowDiskUse = true;
+
+            List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
+            if (keepAsString)
+                return result.AsParallel().Select(x => x.ToString()).ToList<object>();
+            else
+                return result.AsParallel().Select(x => FromBson(x)).ToList<object>();
+        }
+
+        /*******************************************/
+
+
+        public List<object> QueryParallelOrdered(List<string> queryStrings = null, bool keepAsString = false)
+        {
+            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                return new List<object>();
+
+            var pipeline = queryStrings.Select(s => BsonDocument.Parse(s)).ToList();
+
+            var aggregateOptions = new AggregateOptions();
+            aggregateOptions.AllowDiskUse = true;
+
+            List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
+            if (keepAsString)
+                return result.AsParallel().AsOrdered().Select(x => x.ToString()).ToList<object>();
+            else
+                return result.AsParallel().AsOrdered().Select(x => FromBson(x)).ToList<object>();
+        }
+
+        /*******************************************/
+
         public bool MoveCollection(MongoLink other, bool replaceContent = true)
         {
             try
