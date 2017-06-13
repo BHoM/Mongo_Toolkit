@@ -252,5 +252,10 @@ namespace Mongo_Adapter.Structural.Interface
         {
             throw new NotImplementedException();
         }
+
+        public bool GetBarDisplacements(List<string> bars, List<string> cases, int divisions, ResultOrder orderBy, out Dictionary<string, IResultSet> results)
+        {
+            return GetResult<BarForce>("BarDisplacements", bars, cases, orderBy, out results);
+        }
     }
 }
