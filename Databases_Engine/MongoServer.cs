@@ -3,11 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BHoM.Base;
-using BHoM.Global;
+using BH.oM.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BHoM.Databases;
 using System.IO;
 using System.Threading;
 

@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using BHoM.Base;
-using BHoM.Global;
+using BH.oM.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BHoM.Databases;
+using BHC = BHoM_Engine.DataStream.Convert;
 using System.Text.RegularExpressions;
 using System.IO;
+using System.Collections;
 
 namespace Mongo_Adapter
 {
-    public class MongoLink : IDatabaseCollectionAdapter
+    public class MongoLink : IAdapter
     {
         private MongoClient m_Client;
         private IMongoCollection<BsonDocument> m_Collection;
@@ -61,14 +61,18 @@ namespace Mongo_Adapter
 
         /*******************************************/
 
+        public List<string> ErrorLog { get; set; } = new List<string>();
+
+        /*******************************************/
+
         public int HistorySize { get; set; }
 
         /*******************************************/
 
-        public bool Push(IEnumerable<object> objects, string key, List<string> tags = null)
+        public bool Push(IEnumerable<object> objects, string key, Dictionary<string, string> config = null)
         {
-            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-                return false;
+            //if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+            //    return false;
 
             // Create the bulk query for the object to replace/insert
             DateTime timestamp = DateTime.Now; 
@@ -85,7 +89,7 @@ namespace Mongo_Adapter
 
             // Push in the history database as well
             bulk.Remove(deletePrevious);
-            List<object> times = Query(new List<string> { "{$group: {_id: \"$__Time__\"}}", "{$sort: {_id: -1}}" });
+            List<object> times = Pull(new List<string> { "{$group: {_id: \"$__Time__\"}}", "{$sort: {_id: -1}}" }) as List<object>;
             if (times.Count > HistorySize)
             {
                 bulk.Insert(0, new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Lte("__Time__", times[HistorySize])));
@@ -97,7 +101,7 @@ namespace Mongo_Adapter
 
         /*******************************************/
 
-        public bool Delete(string filterString = "{}")
+        public bool Delete(string filterString = "{}", Dictionary<string, string> config = null)
         {
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
                 return false;
@@ -109,10 +113,14 @@ namespace Mongo_Adapter
 
         /*******************************************/
 
-        public List<object> Pull(string filterString = "{}", bool keepAsString = false)
+        public IList PullOne(string filterString = "{}", Dictionary<string, string> config = null)
         {
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
                 return new List<object>();
+
+            bool keepAsString = false;
+            if (config != null && config.ContainsKey("keepAsString"))
+                bool.TryParse(config["keepAsString"], out keepAsString);
 
             FilterDefinition<BsonDocument> filter = filterString;
             List<BsonDocument> result = m_Collection.Find(filter).ToList();
@@ -124,10 +132,14 @@ namespace Mongo_Adapter
 
         /*******************************************/
 
-        public List<object> Query(List<string> queryStrings = null, bool keepAsString = false)
+        public IList Pull(IEnumerable<string> queryStrings = null, Dictionary<string, string> config = null)
         {
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
                 return new List<object>();
+
+            bool keepAsString = false;
+            if (config != null && config.ContainsKey("keepAsString"))
+                bool.TryParse(config["keepAsString"], out keepAsString);
 
             var pipeline = queryStrings.Select(s => BsonDocument.Parse(s)).ToList();
 
@@ -139,6 +151,13 @@ namespace Mongo_Adapter
                 return result.Select(x => x.ToString()).ToList<object>();
             else
                 return result.Select(x => FromBson(x)).ToList<object>();
+        }
+
+        /*******************************************/
+
+        public bool Execute(string command, Dictionary<string, string> config = null)
+        {
+            return false;
         }
 
         /*******************************************/
@@ -183,39 +202,43 @@ namespace Mongo_Adapter
 
         private BsonDocument ToBson(object obj, string key, DateTime timestamp)
         {
-            if (obj is string) return ToBson(obj as string, key, timestamp);
-            var document = BsonDocument.Parse(BHoM.Base.JSONWriter.Write(obj));  
-            if (key != "")
-            {
-                document["__Key__"] = key;
-                document["__Time__"] = timestamp;
-            }
-                
-            
+            var document = BHC.Bson.Write(obj);
+            document["__Key__"] = key;
+            document["__Time__"] = timestamp;
+
             return document;
         }
 
         /*******************************************/
 
-        private BsonDocument ToBson(string obj, string key, DateTime timestamp)
+        private object FromBson(BsonDocument document)
         {
-            var document = BsonDocument.Parse(obj);
-            if (key != "")
-            {
-                document["__Key__"] = key;
-                document["__Time__"] = timestamp;
-            }
-                
-            return document;
+            document.Remove("__Key__");
+            document.Remove("__Time__");
+            return BHC.Bson.Read(document);
         }
 
         /*******************************************/
 
-        private object FromBson(BsonDocument bson)
-        {
-            MongoDB.Bson.IO.JsonWriterSettings writerSettings = new MongoDB.Bson.IO.JsonWriterSettings { OutputMode = MongoDB.Bson.IO.JsonOutputMode.Strict };
-            return BHoM.Base.JsonReader.ReadObject(bson.ToJson(writerSettings));
-        }
+        //private BsonDocument ToBson(string obj, string key, DateTime timestamp)
+        //{
+        //    var document = BsonDocument.Parse(obj);
+        //    if (key != "")
+        //    {
+        //        document["__Key__"] = key;
+        //        document["__Time__"] = timestamp;
+        //    }
+
+        //    return document;
+        //}
+
+        /*******************************************/
+
+        //private object FromBson(BsonDocument bson)
+        //{
+        //    MongoDB.Bson.IO.JsonWriterSettings writerSettings = new MongoDB.Bson.IO.JsonWriterSettings { OutputMode = MongoDB.Bson.IO.JsonOutputMode.Strict };
+        //    return BHoM.Base.JsonReader.ReadObject(bson.ToJson(writerSettings));
+        //}
 
     }
 }
