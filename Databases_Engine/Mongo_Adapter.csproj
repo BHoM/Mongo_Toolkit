@@ -35,6 +35,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BHoM\Build\BHoM.dll</HintPath>
     </Reference>
+    <Reference Include="BHoM_Adapter">
+      <HintPath>..\..\BHoM_Engine\Build\BHoM_Adapter.dll</HintPath>
+    </Reference>
     <Reference Include="DataStream_Engine">
       <HintPath>..\..\BHoM_Engine\Build\DataStream_Engine.dll</HintPath>
     </Reference>
@@ -65,7 +68,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MongoDataBase.cs" />
+    <Compile Include="MongoAdapter.cs" />
     <Compile Include="MongoLink.cs" />
+    <Compile Include="MongoQueryWriter.cs" />
     <Compile Include="MongoServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structural\Interface\MongoStructuralElementAdapter.cs" />

@@ -1,244 +1,245 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Base;
-using MongoDB.Bson;
-using MongoDB.Driver;
-using BHC = BHoM_Engine.DataStream.Convert;
-using System.Text.RegularExpressions;
-using System.IO;
-using System.Collections;
+﻿//using System;
+//using System.Collections.Generic;
+//using System.Linq;
+//using System.Text;
+//using System.Threading.Tasks;
+//using BH.oM.Base;
+//using MongoDB.Bson;
+//using MongoDB.Driver;
+//using BHC = BHoM_Engine.DataStream.Convert;
+//using System.Text.RegularExpressions;
+//using System.IO;
+//using System.Collections;
+//using BH.Adapter;
 
-namespace Mongo_Adapter
-{
-    public class MongoLink : IAdapter
-    {
-        private MongoClient m_Client;
-        private IMongoCollection<BsonDocument> m_Collection;
-        private IMongoCollection<BsonDocument> m_History;
+//namespace Mongo_Adapter
+//{
+//    public class MongoLink : IAdapter
+//    {
+//        private MongoClient m_Client;
+//        private IMongoCollection<BsonDocument> m_Collection;
+//        private IMongoCollection<BsonDocument> m_History;
 
-        public MongoLink(string serverLink = "mongodb://localhost:27017", string databaseName = "project", string collectionName = "bhomObjects")
-        {
-            if (!serverLink.StartsWith("mongodb://"))
-                serverLink = "mongodb://" + serverLink + ":27017";
+//        public MongoLink(string serverLink = "mongodb://localhost:27017", string databaseName = "project", string collectionName = "bhomObjects")
+//        {
+//            if (!serverLink.StartsWith("mongodb://"))
+//                serverLink = "mongodb://" + serverLink + ":27017";
 
-            m_Client = new MongoClient(serverLink);
-            IMongoDatabase database = m_Client.GetDatabase(databaseName);
-            m_Collection = database.GetCollection<BsonDocument>(collectionName);
+//            m_Client = new MongoClient(serverLink);
+//            IMongoDatabase database = m_Client.GetDatabase(databaseName);
+//            m_Collection = database.GetCollection<BsonDocument>(collectionName);
 
-            HistorySize = 20;
+//            HistorySize = 20;
 
-            IMongoDatabase hist_Database = m_Client.GetDatabase(databaseName + "_History");
-            m_History = hist_Database.GetCollection<BsonDocument>(collectionName);
-        }
+//            IMongoDatabase hist_Database = m_Client.GetDatabase(databaseName + "_History");
+//            m_History = hist_Database.GetCollection<BsonDocument>(collectionName);
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public string ServerName
-        {
-            get
-            {
-                MongoServerAddress server = m_Collection.Database.Client.Settings.Server;
-                return "mongodb://" + server.ToString();
-            }
-        }
+//        public string ServerName
+//        {
+//            get
+//            {
+//                MongoServerAddress server = m_Collection.Database.Client.Settings.Server;
+//                return "mongodb://" + server.ToString();
+//            }
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public string DatabaseName
-        {
-            get { return m_Collection.Database.DatabaseNamespace.DatabaseName;  }
-        }
+//        public string DatabaseName
+//        {
+//            get { return m_Collection.Database.DatabaseNamespace.DatabaseName;  }
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public string CollectionName
-        {
-            get { return m_Collection.CollectionNamespace.CollectionName;  }
-        }
+//        public string CollectionName
+//        {
+//            get { return m_Collection.CollectionNamespace.CollectionName;  }
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public List<string> ErrorLog { get; set; } = new List<string>();
+//        public List<string> ErrorLog { get; set; } = new List<string>();
 
-        /*******************************************/
+//        /*******************************************/
 
-        public int HistorySize { get; set; }
+//        public int HistorySize { get; set; }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public bool Push(IEnumerable<object> objects, string key, Dictionary<string, string> config = null)
-        {
-            //if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-            //    return false;
+//        public bool Push(IEnumerable<object> objects, string key, Dictionary<string, string> config = null)
+//        {
+//            //if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+//            //    return false;
 
-            // Create the bulk query for the object to replace/insert
-            DateTime timestamp = DateTime.Now; 
-            List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
-            WriteModel<BsonDocument> deletePrevious = new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Key__", key));
-            bulk.Add(deletePrevious);
-            foreach (object obj in objects)
-                bulk.Add(new InsertOneModel<BsonDocument>(ToBson(obj, key, timestamp)));
+//            // Create the bulk query for the object to replace/insert
+//            DateTime timestamp = DateTime.Now; 
+//            List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
+//            WriteModel<BsonDocument> deletePrevious = new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Key__", key));
+//            bulk.Add(deletePrevious);
+//            foreach (object obj in objects)
+//                bulk.Add(new InsertOneModel<BsonDocument>(ToBson(obj, key, timestamp)));
 
-            // Send that query
-            BulkWriteOptions bulkOptions = new BulkWriteOptions();
-            bulkOptions.IsOrdered = true;
-            m_Collection.BulkWrite(bulk, bulkOptions);
+//            // Send that query
+//            BulkWriteOptions bulkOptions = new BulkWriteOptions();
+//            bulkOptions.IsOrdered = true;
+//            m_Collection.BulkWrite(bulk, bulkOptions);
 
-            // Push in the history database as well
-            bulk.Remove(deletePrevious);
-            List<object> times = Pull(new List<string> { "{$group: {_id: \"$__Time__\"}}", "{$sort: {_id: -1}}" }) as List<object>;
-            if (times.Count > HistorySize)
-            {
-                bulk.Insert(0, new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Lte("__Time__", times[HistorySize])));
-            }
+//            // Push in the history database as well
+//            bulk.Remove(deletePrevious);
+//            List<object> times = Pull(new List<string> { "{$group: {_id: \"$__Time__\"}}", "{$sort: {_id: -1}}" }) as List<object>;
+//            if (times.Count > HistorySize)
+//            {
+//                bulk.Insert(0, new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Lte("__Time__", times[HistorySize])));
+//            }
 
-            m_History.BulkWrite(bulk, bulkOptions);
-            return true;
-        }
+//            m_History.BulkWrite(bulk, bulkOptions);
+//            return true;
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public bool Delete(string filterString = "{}", Dictionary<string, string> config = null)
-        {
-            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-                return false;
+//        public bool Delete(string filterString = "{}", Dictionary<string, string> config = null)
+//        {
+//            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+//                return false;
 
-            FilterDefinition<BsonDocument> filter = filterString;
-            m_Collection.DeleteMany(filter);
-            return true;
-        }
+//            FilterDefinition<BsonDocument> filter = filterString;
+//            m_Collection.DeleteMany(filter);
+//            return true;
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public IList PullOne(string filterString = "{}", Dictionary<string, string> config = null)
-        {
-            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-                return new List<object>();
+//        public IList PullOne(string filterString = "{}", Dictionary<string, string> config = null)
+//        {
+//            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+//                return new List<object>();
 
-            bool keepAsString = false;
-            if (config != null && config.ContainsKey("keepAsString"))
-                bool.TryParse(config["keepAsString"], out keepAsString);
+//            bool keepAsString = false;
+//            if (config != null && config.ContainsKey("keepAsString"))
+//                bool.TryParse(config["keepAsString"], out keepAsString);
 
-            FilterDefinition<BsonDocument> filter = filterString;
-            List<BsonDocument> result = m_Collection.Find(filter).ToList();
-            if (keepAsString)
-                return result.Select(x => x.ToString()).ToList<object>();
-            else
-                return result.Select(x => FromBson(x)).ToList<object>();
-        }
+//            FilterDefinition<BsonDocument> filter = filterString;
+//            List<BsonDocument> result = m_Collection.Find(filter).ToList();
+//            if (keepAsString)
+//                return result.Select(x => x.ToString()).ToList<object>();
+//            else
+//                return result.Select(x => FromBson(x)).ToList<object>();
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public IList Pull(IEnumerable<string> queryStrings = null, Dictionary<string, string> config = null)
-        {
-            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-                return new List<object>();
+//        public IList Pull(IEnumerable<string> queryStrings = null, Dictionary<string, string> config = null)
+//        {
+//            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+//                return new List<object>();
 
-            bool keepAsString = false;
-            if (config != null && config.ContainsKey("keepAsString"))
-                bool.TryParse(config["keepAsString"], out keepAsString);
+//            bool keepAsString = false;
+//            if (config != null && config.ContainsKey("keepAsString"))
+//                bool.TryParse(config["keepAsString"], out keepAsString);
 
-            var pipeline = queryStrings.Select(s => BsonDocument.Parse(s)).ToList();
+//            var pipeline = queryStrings.Select(s => BsonDocument.Parse(s)).ToList();
 
-            var aggregateOptions = new AggregateOptions();
-            aggregateOptions.AllowDiskUse = true;
+//            var aggregateOptions = new AggregateOptions();
+//            aggregateOptions.AllowDiskUse = true;
 
-            List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
-            if (keepAsString)
-                return result.Select(x => x.ToString()).ToList<object>();
-            else
-                return result.Select(x => FromBson(x)).ToList<object>();
-        }
+//            List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
+//            if (keepAsString)
+//                return result.Select(x => x.ToString()).ToList<object>();
+//            else
+//                return result.Select(x => FromBson(x)).ToList<object>();
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public bool Execute(string command, Dictionary<string, string> config = null)
-        {
-            return false;
-        }
+//        public bool Execute(string command, Dictionary<string, string> config = null)
+//        {
+//            return false;
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        public bool MoveCollection(MongoLink other, bool replaceContent = true)
-        {
-            try
-            {
-                //Access the admin namespace and admin db needed to be able to rename collections
-                var adminDBNameSpace = DatabaseNamespace.Admin;
-                var adminDb = m_Client.GetDatabase(adminDBNameSpace.DatabaseName);
+//        public bool MoveCollection(MongoLink other, bool replaceContent = true)
+//        {
+//            try
+//            {
+//                //Access the admin namespace and admin db needed to be able to rename collections
+//                var adminDBNameSpace = DatabaseNamespace.Admin;
+//                var adminDb = m_Client.GetDatabase(adminDBNameSpace.DatabaseName);
 
-                //Create the renaming command
-                Command<BsonDocument> command = "{ renameCollection: \"" +
-                                                this.DatabaseName + "." + this.CollectionName +
-                                                "\", to:\"" +
-                                                other.DatabaseName + "." + other.CollectionName +
-                                                "\", dropTarget:\"" + replaceContent.ToString() + "\"}";
+//                //Create the renaming command
+//                Command<BsonDocument> command = "{ renameCollection: \"" +
+//                                                this.DatabaseName + "." + this.CollectionName +
+//                                                "\", to:\"" +
+//                                                other.DatabaseName + "." + other.CollectionName +
+//                                                "\", dropTarget:\"" + replaceContent.ToString() + "\"}";
 
-                //Execute command
-                adminDb.RunCommand(command);
-            }
-            catch
-            {
-                return false;
-            }
+//                //Execute command
+//                adminDb.RunCommand(command);
+//            }
+//            catch
+//            {
+//                return false;
+//            }
 
-            return true;
-        }
+//            return true;
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        /*public List<string> GetHistoryTimes()
-        {
-            List<object> times = Query(new List<string> { "{$group: {_id: \"$__Time__\"}}", "{$sort: {_id: -1}}" });
+//        /*public List<string> GetHistoryTimes()
+//        {
+//            List<object> times = Query(new List<string> { "{$group: {_id: \"$__Time__\"}}", "{$sort: {_id: -1}}" });
 
-        }*/
+//        }*/
 
-        /*******************************************/
-        /****  Private Helper Methods           ****/
-        /*******************************************/
+//        /*******************************************/
+//        /****  Private Helper Methods           ****/
+//        /*******************************************/
 
-        private BsonDocument ToBson(object obj, string key, DateTime timestamp)
-        {
-            var document = BHC.Bson.Write(obj);
-            document["__Key__"] = key;
-            document["__Time__"] = timestamp;
+//        private BsonDocument ToBson(object obj, string key, DateTime timestamp)
+//        {
+//            var document = BHC.Bson.Write(obj);
+//            document["__Key__"] = key;
+//            document["__Time__"] = timestamp;
 
-            return document;
-        }
+//            return document;
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        private object FromBson(BsonDocument document)
-        {
-            document.Remove("__Key__");
-            document.Remove("__Time__");
-            return BHC.Bson.Read(document);
-        }
+//        private object FromBson(BsonDocument document)
+//        {
+//            document.Remove("__Key__");
+//            document.Remove("__Time__");
+//            return BHC.Bson.Read(document);
+//        }
 
-        /*******************************************/
+//        /*******************************************/
 
-        //private BsonDocument ToBson(string obj, string key, DateTime timestamp)
-        //{
-        //    var document = BsonDocument.Parse(obj);
-        //    if (key != "")
-        //    {
-        //        document["__Key__"] = key;
-        //        document["__Time__"] = timestamp;
-        //    }
+//        //private BsonDocument ToBson(string obj, string key, DateTime timestamp)
+//        //{
+//        //    var document = BsonDocument.Parse(obj);
+//        //    if (key != "")
+//        //    {
+//        //        document["__Key__"] = key;
+//        //        document["__Time__"] = timestamp;
+//        //    }
 
-        //    return document;
-        //}
+//        //    return document;
+//        //}
 
-        /*******************************************/
+//        /*******************************************/
 
-        //private object FromBson(BsonDocument bson)
-        //{
-        //    MongoDB.Bson.IO.JsonWriterSettings writerSettings = new MongoDB.Bson.IO.JsonWriterSettings { OutputMode = MongoDB.Bson.IO.JsonOutputMode.Strict };
-        //    return BHoM.Base.JsonReader.ReadObject(bson.ToJson(writerSettings));
-        //}
+//        //private object FromBson(BsonDocument bson)
+//        //{
+//        //    MongoDB.Bson.IO.JsonWriterSettings writerSettings = new MongoDB.Bson.IO.JsonWriterSettings { OutputMode = MongoDB.Bson.IO.JsonOutputMode.Strict };
+//        //    return BHoM.Base.JsonReader.ReadObject(bson.ToJson(writerSettings));
+//        //}
 
-    }
-}
+//    }
+//}
