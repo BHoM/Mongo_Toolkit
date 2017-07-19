@@ -9,7 +9,7 @@ using MongoDB.Driver;
 using System.IO;
 using System.Threading;
 
-namespace Mongo_Adapter
+namespace BH.Adapter.Mongo
 {
     public class MongoServer
     {

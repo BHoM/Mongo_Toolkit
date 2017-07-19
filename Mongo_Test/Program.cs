@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Mongo_Adapter;
 using System.IO;
 using BH.oM.Structural.Elements;
 using BH.oM.Base;
 using BH.oM.Geometry;
 using System.Threading;
+using BH.Adapter.Mongo;
+using BH.Adapter.Queries;
 
 namespace Mongo_Test
 {
@@ -47,7 +48,7 @@ namespace Mongo_Test
                 new A (-6, -7) { a = 1, publicField = -4 },
                 new B { a = 2, b = 45 },
                 new C { a = 3, c = 56 },
-                new D { a = 4, b = 67, d = 123 },
+                new D { a = 4, b = 67, d = 123, publicField = -4 },
                 new E { a = 5, c = 78, e = 456 },
                 new Dictionary<string, A> {
                     { "A",  new A { a = 1 } },
@@ -56,12 +57,15 @@ namespace Mongo_Test
                 }
             };
 
-            MongoLink link = new MongoLink();
+            MongoAdapter link = new MongoAdapter();
+            Thread.Sleep(1000);
+
             link.Push(items, "key");
 
             Thread.Sleep(1000);
 
-            List<object> result = link.Pull(new string[] { "{$match: {}}" }) as List<object>;
+            FilterQuery filter = new FilterQuery { Equalities = new Dictionary<string, object> { { "publicField", -4 } } };
+            List<object> result = link.Pull(new List<IQuery> { filter }) as List<object>;
 
             Console.Read();
         }

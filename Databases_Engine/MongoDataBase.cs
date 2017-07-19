@@ -9,7 +9,7 @@ using MongoDB.Driver;
 using System.Text.RegularExpressions;
 using System.IO;
 
-namespace Mongo_Adapter
+namespace BH.Adapter.Mongo
 {
     //public class MongoDataBase : IDatabaseAdapter
     //{
