@@ -72,7 +72,7 @@ namespace Mongo_Test
             MongoAdapter link = new MongoAdapter();
             Thread.Sleep(1000);
 
-            link.Push(items, "key");
+            link.Push(items, "tag");
 
             Thread.Sleep(1000);
 
@@ -115,8 +115,8 @@ namespace Mongo_Test
                 Console.WriteLine();
             }
 
-            string outputFileRoot = @"C:\Users\adecler\Documents\"; // initialize to the file to write to.
-            File.WriteAllLines(@"C:\Users\adecler\Documents\json_Save.txt", docs.Select(x => x.ToJson()));
+            string outputFileRoot = @"C:\Users\Arnaud\Documents\"; // initialize to the file to write to.
+            File.WriteAllLines(@"C:\Users\Arnaud\Documents\json_Save.txt", docs.Select(x => x.ToJson()));
 
             FileStream mongoStream = new FileStream(outputFileRoot + "bsonSave_Mongo.txt", FileMode.Create);
             var writer = new BsonBinaryWriter(mongoStream);

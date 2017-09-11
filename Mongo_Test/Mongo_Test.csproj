@@ -38,7 +38,7 @@
       <HintPath>..\..\BHoM\Build\BHoM.dll</HintPath>
     </Reference>
     <Reference Include="BHoM_Adapter">
-      <HintPath>..\..\BHoM_Engine\Build\BHoM_Adapter.dll</HintPath>
+      <HintPath>..\..\BHoM_Adapter\Build\BHoM_Adapter.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.4.4\lib\net45\MongoDB.Bson.dll</HintPath>
