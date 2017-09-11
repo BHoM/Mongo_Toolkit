@@ -49,13 +49,11 @@ namespace BH.Adapter.Mongo
 
         private void M_Process_Exited(object sender, EventArgs e)
         {
-            /*m_Process = null;
+            m_Process = null;
             m_FolderName = "";
 
             if (Killed != null)
-                Killed.Invoke();*/
-
-            // Doesn't work at the moment - This is never called
+                Killed.Invoke();
         }
 
         public event Action Killed; 

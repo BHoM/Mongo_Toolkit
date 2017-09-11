@@ -35,7 +35,17 @@ namespace BH.Adapter.Mongo
         public static BsonDocument _ToMongoQuery(this FilterQuery query)
         {
             BsonDocument document = new BsonDocument();
-            document.Add(new BsonElement("$match", query.Equalities.ToBsonDocument()));
+
+            // Define the match
+            BsonDocument equalities = query.Equalities.ToBsonDocument();
+
+            if (query.Type != null)
+                equalities["_t"] = query.Type.ToString();
+            if (query.Tag != "")
+                equalities["__Tag__"] = query.Tag;
+
+            document.Add(new BsonElement("$match", equalities));
+
             return document;
         }
     }

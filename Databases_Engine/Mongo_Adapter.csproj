@@ -36,10 +36,7 @@
       <HintPath>..\..\BHoM\Build\BHoM.dll</HintPath>
     </Reference>
     <Reference Include="BHoM_Adapter">
-      <HintPath>..\..\BHoM_Engine\Build\BHoM_Adapter.dll</HintPath>
-    </Reference>
-    <Reference Include="DataStream_Engine">
-      <HintPath>..\..\BHoM_Engine\Build\DataStream_Engine.dll</HintPath>
+      <HintPath>..\..\BHoM_Adapter\Build\BHoM_Adapter.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.4.4\lib\net45\MongoDB.Bson.dll</HintPath>
@@ -67,18 +64,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MongoDataBase.cs" />
+    <Compile Include="Convert\Bson.cs" />
+    <Compile Include="IAdapter\Execute.cs" />
+    <Compile Include="IAdapter\Delete.cs" />
+    <Compile Include="IAdapter\Update.cs" />
+    <Compile Include="IAdapter\Pull.cs" />
+    <Compile Include="IAdapter\Push.cs" />
     <Compile Include="MongoAdapter.cs" />
-    <Compile Include="MongoLink.cs" />
-    <Compile Include="MongoQueryWriter.cs" />
+    <Compile Include="Convert\MongoQuery.cs" />
     <Compile Include="MongoServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Structural\Interface\MongoStructuralElementAdapter.cs" />
-    <Compile Include="Structural\Interface\MongoStructuralResultAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
