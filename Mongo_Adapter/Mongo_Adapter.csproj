@@ -65,13 +65,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Convert\Bson.cs" />
-    <Compile Include="IAdapter\Create.cs" />
-    <Compile Include="IAdapter\Execute.cs" />
-    <Compile Include="IAdapter\Delete.cs" />
-    <Compile Include="IAdapter\Read.cs" />
-    <Compile Include="IAdapter\Update.cs" />
-    <Compile Include="IAdapter\Pull.cs" />
-    <Compile Include="IAdapter\Push.cs" />
+    <Compile Include="CRUD\Create.cs" />
+    <Compile Include="CRUD\Execute.cs" />
+    <Compile Include="CRUD\Delete.cs" />
+    <Compile Include="CRUD\Read.cs" />
+    <Compile Include="CRUD\Update.cs" />
+    <Compile Include="CRUD\Pull.cs" />
+    <Compile Include="CRUD\Push.cs" />
     <Compile Include="MongoAdapter.cs" />
     <Compile Include="Convert\MongoQuery.cs" />
     <Compile Include="MongoServer.cs" />
