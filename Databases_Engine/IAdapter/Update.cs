@@ -15,9 +15,9 @@ using BH.Adapter;
 
 namespace BH.Adapter.Mongo
 {
-    public partial class MongoAdapter : IAdapter
+    public partial class MongoAdapter 
     {
-        public int Update(FilterQuery filter, string property, object newValue, Dictionary<string, string> config = null)
+        public override int UpdateProperty(FilterQuery filter, string property, object newValue, Dictionary<string, string> config = null)
         {
             BsonDocument definition = new BsonDocument();
             definition["__Time__"] = DateTime.Now;
@@ -25,22 +25,6 @@ namespace BH.Adapter.Mongo
 
             UpdateResult result = m_Collection.UpdateMany(filter.ToMongoQuery(), definition);
             return (int)result.ModifiedCount;
-        }
-
-        public int UpdateProperty(FilterQuery filter, string property, object newValue, Dictionary<string, string> config = null)
-        {
-            return Update(filter, property, newValue, config);
-        }
-
-        public bool MoveToCollection(IEnumerable<IQuery> queries, MongoAdapter target, Dictionary<string, string> config = null)
-        {
-            IEnumerable<object> objects = this.Pull(queries, config);
-            if (target.Push(objects))
-            {
-                //return this.Delete(filter) > 0;
-                return true;
-            }
-            return false;
         }
     }
 }

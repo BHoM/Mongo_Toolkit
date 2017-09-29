@@ -8,9 +8,9 @@ using BH.Adapter.Queries;
 
 namespace BH.Adapter.Mongo
 {
-    public partial class MongoAdapter : IAdapter
+    public partial class MongoAdapter 
     {
-        public int Delete(FilterQuery filter, Dictionary<string, string> config = null)
+        public override int Delete(FilterQuery filter, Dictionary<string, string> config = null)
         {
             DeleteResult result = m_Collection.DeleteMany(filter.ToMongoQuery());
             return (int)result.DeletedCount;
