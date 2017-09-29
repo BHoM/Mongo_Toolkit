@@ -14,15 +14,13 @@ using BH.Adapter;
 
 namespace BH.Adapter.Mongo
 {
-    public partial class MongoAdapter : IAdapter
+    public partial class MongoAdapter : BHoMAdapter
     {
         /***************************************************/
         /**** Properties                                ****/
         /***************************************************/
 
-        public List<string> ErrorLog { get; set; } = new List<string>();
-
-        public int HistorySize { get; set; } = 20;
+        public int HistorySize { get; set; } = 5;
 
 
         /***************************************************/

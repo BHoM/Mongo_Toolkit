@@ -15,9 +15,9 @@ using BH.Adapter;
 
 namespace BH.Adapter.Mongo
 {
-    public partial class MongoAdapter : IAdapter
+    public partial class MongoAdapter 
     {
-        public bool Execute(string command, Dictionary<string, object> parameters = null, Dictionary<string, string> config = null)
+        public override bool Execute(string command, Dictionary<string, object> parameters = null, Dictionary<string, string> config = null)
         {
             switch (command)
             {

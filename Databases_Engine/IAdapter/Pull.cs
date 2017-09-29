@@ -15,7 +15,7 @@ using BH.Adapter;
 
 namespace BH.Adapter.Mongo
 {
-    public partial class MongoAdapter : IAdapter
+    public partial class MongoAdapter 
     {
         public IEnumerable<object> Pull(IEnumerable<IQuery> query, Dictionary<string, string> config = null)
         {
