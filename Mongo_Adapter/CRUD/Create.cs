@@ -8,7 +8,7 @@ namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter
     {
-        protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false)
+        protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false) 
         {
             return false;
         }
