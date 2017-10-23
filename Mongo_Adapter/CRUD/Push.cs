@@ -17,7 +17,7 @@ namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
-        public bool Push(IEnumerable<object> objects, string tag = "", Dictionary<string, string> config = null)
+        public override bool Push(IEnumerable<BHoMObject> objects, string tag = "", Dictionary<string, string> config = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
@@ -48,10 +48,10 @@ namespace BH.Adapter.Mongo
                 m_Collection.InsertMany(documents);
 
             // Push in the history database as well
-            List<IQuery> queries = new List<IQuery> {
+            BatchQuery queries = new BatchQuery(new List<IQuery> {
                 new CustomQuery("{$group: {_id: \"$__Time__\"}}"),
                 new CustomQuery("{$sort: {_id: -1}}")
-            };
+            });
             List<object> times = Pull(queries) as List<object>;
             if (times.Count > HistorySize)
                 m_History.DeleteMany(Builders<BsonDocument>.Filter.Lte("__Time__", times[HistorySize]));

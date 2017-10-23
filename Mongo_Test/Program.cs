@@ -40,7 +40,7 @@ namespace Mongo_Test
     {
         static void Main(string[] args)
         {
-            TestBson();
+            TestMongo();
 
             Console.Read();
         }
@@ -55,7 +55,7 @@ namespace Mongo_Test
                 new Node {Point = new Point(7, 8, 9), Name = "C"}
             };
 
-            List<object> items = new List<object>
+            /*List<object> items = new List<object> //TODO: Turn this into Custom BHoMObjects
             {
                 new A (-6, -7) { a = 1, publicField = -4 },
                 new B { a = 2, b = 45 },
@@ -67,17 +67,17 @@ namespace Mongo_Test
                     { "C",  new C { a = 3, c = 56 } },
                     { "E",  new E { a = 5, c = 78, e = 456 } }
                 }
-            };
+            };*/
 
             MongoAdapter link = new MongoAdapter();
             Thread.Sleep(1000);
 
-            link.Push(items, "tag");
+            //link.Push(items, "tag");
 
             Thread.Sleep(1000);
 
             FilterQuery filter = new FilterQuery { Equalities = new Dictionary<string, object> { { "publicField", -4 } } };
-            List<object> result = link.Pull(new List<IQuery> { filter }) as List<object>;
+            List<object> result = link.Pull(filter) as List<object>;
         }
 
         public static void TestBson()

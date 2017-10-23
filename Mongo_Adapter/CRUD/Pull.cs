@@ -17,14 +17,18 @@ namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
-        public IEnumerable<object> Pull(IEnumerable<IQuery> query, Dictionary<string, string> config = null)
+        public override IEnumerable<object> Pull(IQuery query, Dictionary<string, string> config = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
                 return new List<object>();
 
             // Get the results
-            var pipeline = query.Select(s => s.ToMongoQuery()).ToList();
+            List<BsonDocument> pipeline = new List<BsonDocument>();
+            if (query is BatchQuery)
+                pipeline = ((BatchQuery)query).Queries.Select(s => s.ToMongoQuery()).ToList();
+            else
+                pipeline.Add(query.ToMongoQuery());
             var aggregateOptions = new AggregateOptions() { AllowDiskUse = true };
             List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
 
