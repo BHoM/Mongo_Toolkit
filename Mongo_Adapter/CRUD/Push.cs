@@ -17,7 +17,7 @@ namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
-        public override bool Push(IEnumerable<BHoMObject> objects, string tag = "", Dictionary<string, string> config = null)
+        public override bool Push(IEnumerable<BHoMObject> objects, string tag = "", Dictionary<string, object> config = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
@@ -28,9 +28,9 @@ namespace BH.Adapter.Mongo
             if (config != null)
             {
                 if (config.ContainsKey("Tag"))
-                    tag = config["Tag"];
+                    tag = config["Tag"] as string;
                 if (config.ContainsKey("Replace"))
-                    bool.TryParse(config["Replace"], out replace);
+                    bool.TryParse(config["Replace"] as string, out replace);
             }
 
             // Create the bulk query for the object to replace/insert

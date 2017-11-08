@@ -17,7 +17,7 @@ namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
-        public override IEnumerable<object> Pull(IQuery query, Dictionary<string, string> config = null)
+        public override IEnumerable<object> Pull(IQuery query, Dictionary<string, object> config = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)

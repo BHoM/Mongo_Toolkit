@@ -17,7 +17,7 @@ namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
-        public override int UpdateProperty(FilterQuery filter, string property, object newValue, Dictionary<string, string> config = null)
+        public override int UpdateProperty(FilterQuery filter, string property, object newValue, Dictionary<string, object> config = null)
         {
             BsonDocument definition = new BsonDocument();
             definition["__Time__"] = DateTime.Now;
