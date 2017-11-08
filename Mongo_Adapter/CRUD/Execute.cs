@@ -17,7 +17,7 @@ namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
-        public override bool Execute(string command, Dictionary<string, object> parameters = null, Dictionary<string, string> config = null)
+        public override bool Execute(string command, Dictionary<string, object> parameters = null, Dictionary<string, object> config = null)
         {
             switch (command)
             {
@@ -26,7 +26,7 @@ namespace BH.Adapter.Mongo
                     {
                         bool replaceContent = false;
                         if (config != null && config.ContainsKey("Replace"))
-                            bool.TryParse(config["Replace"], out replaceContent);
+                            bool.TryParse(config["Replace"] as string, out replaceContent);
                         return MoveCollection(parameters["Destination"] as MongoAdapter, replaceContent);
                     }
                     break;
