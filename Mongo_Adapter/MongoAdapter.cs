@@ -27,12 +27,12 @@ namespace BH.Adapter.Mongo
         /**** Constructors                              ****/
         /***************************************************/
 
-        public MongoAdapter(string serverName = "mongodb://localhost:27017", string databaseName = "project", string collectionName = "bhomObjects")
+        public MongoAdapter(string serverName = "mongodb://localhost", int port = 27017, string databaseName = "project", string collectionName = "bhomObjects")
         {
             if (!serverName.StartsWith("mongodb://"))
-                serverName = "mongodb://" + serverName + ":27017";
+                serverName = "mongodb://" + serverName;
 
-            m_Client = new MongoClient(serverName);
+            m_Client = new MongoClient(serverName + ":" + port.ToString());
             IMongoDatabase database = m_Client.GetDatabase(databaseName);
             m_Collection = database.GetCollection<BsonDocument>(collectionName);
 
