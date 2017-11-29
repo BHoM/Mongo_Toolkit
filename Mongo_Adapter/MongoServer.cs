@@ -18,13 +18,13 @@ namespace BH.Adapter.Mongo
             if (m_Process != null && !m_Process.HasExited && m_FolderName != folderName)
                 throw new Exception("A Mongo Server is already running you machine.");
 
-            if (m_Process == null || m_Process.HasExited)
+            if (m_Process == null || m_Process.HasExited) 
             {
                 if (!Directory.Exists(folderName))
                     Directory.CreateDirectory(folderName);
 
                 m_FolderName = folderName;
-                m_Process = System.Diagnostics.Process.Start("mongod", "--dbpath " + folderName);
+                m_Process = System.Diagnostics.Process.Start("mongod", "--dbpath " + "\""+folderName + "\"");
                 m_Process.Exited += M_Process_Exited;
                 m_Process.Disposed += M_Process_Exited;
 
