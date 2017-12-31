@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BHC = BH.Adapter.Convert;
-using System.Text.RegularExpressions;
-using System.IO;
-using System.Collections;
-using BH.Adapter.Queries;
-using BH.Adapter;
+using BH.oM.Queries;
 
 namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
+        /***************************************************/
+        /**** Public Methods                            ****/
+        /***************************************************/
+
         public override IEnumerable<object> Pull(IQuery query, Dictionary<string, object> config = null)
         {
             // Check that the link is still alive
@@ -26,9 +22,9 @@ namespace BH.Adapter.Mongo
             // Get the results
             List<BsonDocument> pipeline = new List<BsonDocument>();
             if (query is BatchQuery)
-                pipeline = ((BatchQuery)query).Queries.Select(s => s.ToMongoQuery()).ToList();
+                pipeline = ((BatchQuery)query).Queries.Select(s => s.IToMongoQuery()).ToList();
             else
-                pipeline.Add(query.ToMongoQuery());
+                pipeline.Add(query.IToMongoQuery());
             var aggregateOptions = new AggregateOptions() { AllowDiskUse = true };
             List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
 
@@ -36,5 +32,7 @@ namespace BH.Adapter.Mongo
             return result.Select(x => Convert.FromBson(x)).ToList<object>();
         }
 
+
+        /***************************************************/
     }
 }

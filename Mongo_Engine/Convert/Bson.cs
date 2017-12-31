@@ -1,19 +1,18 @@
 ﻿using MongoDB.Bson;
 using System;
-using System.Collections.Generic;
-using BHC = BH.Adapter.Convert;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 
 namespace BH.Adapter.Mongo
 {
     public static partial class Convert
     {
+        /***************************************************/
+        /**** Public Methods                            ****/
+        /***************************************************/
+
         public static BsonDocument ToBson(object obj, string tag, DateTime timestamp)
         {
-            BsonDocument document = BHC.ToBson(obj);
+            BsonDocument document = Engine.Serialiser.Convert.ToBson(obj);
             document["__Tag__"] = tag;
             document["__Time__"] = timestamp;
 
@@ -26,7 +25,9 @@ namespace BH.Adapter.Mongo
         {
             document.Remove("__Tag__");
             document.Remove("__Time__");
-            return BHC.FromBson(document);
+            return Engine.Serialiser.Convert.FromBson(document);
         }
+
+        /***************************************************/
     }
 }

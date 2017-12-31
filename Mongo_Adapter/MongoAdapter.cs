@@ -1,16 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Base;
-using MongoDB.Bson;
+﻿using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Text.RegularExpressions;
-using System.IO;
-using System.Collections;
-using BH.Adapter.Queries;
-using BH.Adapter;
 
 namespace BH.Adapter.Mongo
 {
@@ -42,10 +31,10 @@ namespace BH.Adapter.Mongo
 
 
         /***************************************************/
-        /**** Public Getter Methods                     ****/
+        /**** Public Methods                            ****/
         /***************************************************/
 
-        public string GetServerName()
+        public string ServerName()
         {
             MongoServerAddress server = m_Collection.Database.Client.Settings.Server;
             return "mongodb://" + server.ToString();
@@ -53,14 +42,14 @@ namespace BH.Adapter.Mongo
 
         /*******************************************/
 
-        public string GetDatabaseName()
+        public string DatabaseName()
         {
             return m_Collection.Database.DatabaseNamespace.DatabaseName; 
         }
 
         /*******************************************/
 
-        public string GetCollectionName()
+        public string CollectionName()
         {
             return m_Collection.CollectionNamespace.CollectionName; 
         }
@@ -74,5 +63,7 @@ namespace BH.Adapter.Mongo
         private IMongoCollection<BsonDocument> m_Collection;
         private IMongoCollection<BsonDocument> m_History;
 
+
+        /***************************************************/
     }
 }
