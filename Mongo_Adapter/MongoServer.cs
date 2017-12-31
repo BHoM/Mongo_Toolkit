@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.IO;
@@ -13,6 +10,10 @@ namespace BH.Adapter.Mongo
 {
     public class MongoServer
     {
+        /***************************************************/
+        /**** Constructors                              ****/
+        /***************************************************/
+
         public MongoServer(string folderName)
         {
             if (m_Process != null && !m_Process.HasExited && m_FolderName != folderName)
@@ -33,19 +34,30 @@ namespace BH.Adapter.Mongo
             }
         }
 
-        public List<string> GetAllDatabases()
+
+        /***************************************************/
+        /**** Public Methods                            ****/
+        /***************************************************/
+
+        public List<string> Databases()
         {
             List<BsonDocument> bsonList = m_Client.ListDatabases().ToList();
 
             return bsonList.Select(x => x.GetElement("name").Value.ToString()).ToList();
         }
 
+        /***************************************************/
 
         public bool DeleteDatabase(string name)
         {
             m_Client.DropDatabase(name);
             return true;
         }
+
+
+        /***************************************************/
+        /**** Private Methods                           ****/
+        /***************************************************/
 
         private void M_Process_Exited(object sender, EventArgs e)
         {
@@ -56,10 +68,18 @@ namespace BH.Adapter.Mongo
                 Killed.Invoke();
         }
 
+
+        /***************************************************/
+        /**** Private Fields                            ****/
+        /***************************************************/
+
         public event Action Killed; 
 
         private static string m_FolderName = "";
         private static MongoClient m_Client = null;
         private static System.Diagnostics.Process m_Process = null;
+
+
+        /***************************************************/
     }
 }

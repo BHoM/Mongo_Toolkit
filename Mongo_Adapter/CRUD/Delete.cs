@@ -1,20 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using MongoDB.Driver;
-using BH.Adapter.Queries;
+using BH.oM.Queries;
 
 namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
+        /***************************************************/
+        /**** Public Methods                            ****/
+        /***************************************************/
+
         public override int Delete(FilterQuery filter, Dictionary<string, object> config = null)
         {
             DeleteResult result = m_Collection.DeleteMany(filter.ToMongoQuery());
             return (int)result.DeletedCount;
         }
-        
+
+
+        /***************************************************/
     }
 }

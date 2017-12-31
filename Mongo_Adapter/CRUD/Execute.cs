@@ -1,22 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BH.oM.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BHC = BH.Adapter.Convert;
-using System.Text.RegularExpressions;
-using System.IO;
-using System.Collections;
-using BH.Adapter.Queries;
-using BH.Adapter;
 
 namespace BH.Adapter.Mongo
 {
     public partial class MongoAdapter 
     {
+        /***************************************************/
+        /**** Public Methods                            ****/
+        /***************************************************/
+
         public override bool Execute(string command, Dictionary<string, object> parameters = null, Dictionary<string, object> config = null)
         {
             switch (command)
@@ -50,9 +44,9 @@ namespace BH.Adapter.Mongo
 
                 //Create the renaming command
                 Command<BsonDocument> command = "{ renameCollection: \"" +
-                                                this.GetDatabaseName() + "." + this.GetCollectionName() +
+                                                this.DatabaseName() + "." + this.CollectionName() +
                                                 "\", to:\"" +
-                                                other.GetDatabaseName() + "." + other.GetCollectionName() +
+                                                other.DatabaseName() + "." + other.CollectionName() +
                                                 "\", dropTarget:\"" + replaceContent.ToString() + "\"}";
 
                 //Execute command
@@ -66,5 +60,6 @@ namespace BH.Adapter.Mongo
             return true;
         }
 
+        /***************************************************/
     }
 }

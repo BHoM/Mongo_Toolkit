@@ -1,23 +1,17 @@
-﻿using BH.Adapter.Queries;
+﻿using BH.oM.Queries;
 using MongoDB.Bson;
-using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BH.Adapter.Mongo
 {
     public static partial class Convert
     {
         /***************************************************/
-        /**** Public Methods                            ****/
+        /**** Public Interface                           ****/
         /***************************************************/
 
-        public static BsonDocument ToMongoQuery(this IQuery query)
+        public static BsonDocument IToMongoQuery(this IQuery query)
         {
-            return _ToMongoQuery(query as dynamic);
+            return ToMongoQuery(query as dynamic);
         }
 
 
@@ -25,14 +19,14 @@ namespace BH.Adapter.Mongo
         /**** Private  Methods - Curves                 ****/
         /***************************************************/
 
-        public static BsonDocument _ToMongoQuery(this CustomQuery query)
+        public static BsonDocument ToMongoQuery(this CustomQuery query)
         {
             return BsonDocument.Parse(query.Query);
         }
 
         /***************************************************/
 
-        public static BsonDocument _ToMongoQuery(this FilterQuery query)
+        public static BsonDocument ToMongoQuery(this FilterQuery query)
         {
             BsonDocument document = new BsonDocument();
 
@@ -48,5 +42,7 @@ namespace BH.Adapter.Mongo
 
             return document;
         }
+
+        /***************************************************/
     }
 }
