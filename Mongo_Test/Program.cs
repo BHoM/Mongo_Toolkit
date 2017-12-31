@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.IO;
 using BH.oM.Structural.Elements;
 using BH.oM.Base;
 using BH.oM.Geometry;
 using System.Threading;
 using BH.Adapter.Mongo;
-using BH.Adapter.Queries;
+using BH.oM.Queries;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -50,9 +48,9 @@ namespace Mongo_Test
         {
             List<BHoMObject> nodes = new List<BHoMObject>
             {
-                new Node {Point = new Point(1, 2, 3), Name = "A"},
-                new Node {Point = new Point(4, 5, 6), Name = "B"},
-                new Node {Point = new Point(7, 8, 9), Name = "C"}
+                new Node { Position = new Point { X = 1, Y = 2, Z = 3}, Name = "A"},
+                new Node { Position = new Point { X = 4, Y = 5, Z = 6}, Name = "B"},
+                new Node { Position = new Point { X = 7, Y = 8, Z = 9}, Name = "C"}
             };
 
             /*List<object> items = new List<object> //TODO: Turn this into Custom BHoMObjects
@@ -84,9 +82,9 @@ namespace Mongo_Test
         {
             List<BHoMObject> nodes = new List<BHoMObject>
             {
-                new Node {Point = new Point(1, 2, 3), Name = "A"},
-                new Node {Point = new Point(4, 5, 6), Name = "B"},
-                new Node {Point = new Point(7, 8, 9), Name = "C"}
+                new Node { Position = new Point { X = 1, Y = 2, Z = 3}, Name = "A"},
+                new Node { Position = new Point { X = 4, Y = 5, Z = 6}, Name = "B"},
+                new Node { Position = new Point { X = 7, Y = 8, Z = 9}, Name = "C"}
             };
 
 
@@ -97,7 +95,7 @@ namespace Mongo_Test
                 new C { a = 3, c = 56 },
                 new D { a = 4, b = 67, d = 123 },
                 new E { a = 5, c = 78, e = 456 },
-                new Node {Point = new Point(1, 2, 3), Name = "A"},
+                new Node { Position = new Point { X = 1, Y = 2, Z = 3}, Name = "A"},
                 nodes,
                 new Dictionary<string, A> {
                     { "A",  new A { a = 1 } },
