@@ -18,6 +18,8 @@ namespace BH.Adapter.Mongo
 
         public MongoAdapter(string serverName = "mongodb://localhost", int port = 27017, string databaseName = "project", string collectionName = "bhomObjects")
         {
+            AdapterId = "Mongo_id";
+
             if (!serverName.StartsWith("mongodb://"))
                 serverName = "mongodb://" + serverName;
 
