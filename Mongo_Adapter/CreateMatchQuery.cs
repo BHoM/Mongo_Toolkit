@@ -8,7 +8,7 @@ namespace BH.Adapter.Mongo
 {
     public class CreateMatchQuery
     {
-        public List<string> CreateQuery(string Key, List<object> Filter, List<object> push)
+        public List<string> CreateQuery(string Key, List<object> Filter)
         {
             string projectquery = "";
             string matchquery = "";
@@ -26,26 +26,16 @@ namespace BH.Adapter.Mongo
                         mongolist = Filter[i].ToString();
                 }
             }
-            string propogation = existingfields(push);
-            projectquery = "{$project: {isinfilterlist: {$in: [" + "\"$" + Key + "\"," + "[" + mongolist + "]]}" + propogation + "}}"; 
-            matchquery= "{$match:{" +"isinfilterlist" + ":true}}";
-            aggregatecommand.Add(matchquery);
-            aggregatecommand.Add(projectquery);
            
+            projectquery = "{$addFields: {isinfilterlist: {$in: [" + "\"$" + Key + "\"," + "[" + mongolist + "]]}}}"; 
+            matchquery= "{$match:{" +"isinfilterlist" + ":true}}";
+            
+            aggregatecommand.Add(projectquery);
+            aggregatecommand.Add(matchquery);
+
             return aggregatecommand;
             
         }
 
-        public string existingfields(List<object> propogate)
-        {
-            string propogatenew = "";
-            //need code to add existing feilds to propogate
-            for (int i = 0; i < propogate.Count ; i++)
-            {
-                propogatenew = propogatenew + "," + propogate[i] + ":1";
-
-            }
-                return propogatenew;
-        }
     }
 }
