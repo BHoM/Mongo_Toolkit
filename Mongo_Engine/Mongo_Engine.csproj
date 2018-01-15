@@ -56,6 +56,7 @@
   <ItemGroup>
     <Compile Include="Convert\Bson.cs" />
     <Compile Include="Convert\MongoQuery.cs" />
+    <Compile Include="Create\MatchQuery.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
