@@ -11,7 +11,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        protected override IEnumerable<BHoMObject> Read(Type type, IList ids)
+        protected override IEnumerable<IObject> Read(Type type, IList ids)
         {
             return new List<BHoMObject>();
         }
