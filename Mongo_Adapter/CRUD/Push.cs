@@ -14,7 +14,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override bool Push(IEnumerable<BHoMObject> objects, string tag = "", Dictionary<string, object> config = null)
+        public override bool Push(IEnumerable<IObject> objects, string tag = "", Dictionary<string, object> config = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
