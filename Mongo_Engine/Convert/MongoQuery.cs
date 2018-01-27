@@ -1,7 +1,7 @@
 ﻿using BH.oM.Queries;
 using MongoDB.Bson;
 
-namespace BH.Adapter.Mongo
+namespace BH.Engine.Mongo
 {
     public static partial class Convert
     {
