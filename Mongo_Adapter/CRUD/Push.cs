@@ -32,7 +32,7 @@ namespace BH.Adapter.Mongo
 
             // Create the bulk query for the object to replace/insert
             DateTime timestamp = DateTime.Now;
-            IEnumerable<BsonDocument> documents = objects.Select(x => Convert.ToBson(x, tag, timestamp));
+            IEnumerable<BsonDocument> documents = objects.Select(x => Engine.Mongo.Convert.ToBson(x, tag, timestamp));
             if (replace)
             {
                 List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();

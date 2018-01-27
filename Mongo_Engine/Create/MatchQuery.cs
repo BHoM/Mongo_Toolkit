@@ -8,6 +8,9 @@ namespace BH.Engine.Mongo
 {
     public static partial class Create
     {
+        /***************************************************/
+        /**** Public Methods                            ****/
+        /***************************************************/
         public static List<string> MatchQuery(string Key, List<object> Filter)
         {
             string projectquery = "";
@@ -26,10 +29,10 @@ namespace BH.Engine.Mongo
                         mongolist = Filter[i].ToString();
                 }
             }
-           
-            projectquery = "{$addFields: {isinfilterlist: {$in: [" + "\"$" + Key + "\"," + "[" + mongolist + "]]}}}"; 
-            matchquery= "{$match:{" +"isinfilterlist" + ":true}}";
-            
+          //  projectquery = "{$match: {isinfilterlist: {$in: [" + "\"$" + Key + "\"," + "[" + mongolist + "]]}}}";
+             projectquery = "{$addFields: {isinfilterlist: {$in: [" + "\"$" + Key + "\"," + "[" + mongolist + "]]}}}"; 
+             matchquery= "{$match:{" +"isinfilterlist" + ":true}}";
+
             aggregatecommand.Add(projectquery);
             aggregatecommand.Add(matchquery);
 
