@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using BH.oM.Queries;
+using BH.Engine.Mongo;
 
 namespace BH.Adapter.Mongo
 {
