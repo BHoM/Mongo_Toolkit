@@ -29,7 +29,6 @@ namespace BH.Engine.Mongo
                         mongolist = Filter[i].ToString();
                 }
             }
-          //  projectquery = "{$match: {isinfilterlist: {$in: [" + "\"$" + Key + "\"," + "[" + mongolist + "]]}}}";
              projectquery = "{$addFields: {isinfilterlist: {$in: [" + "\"$" + Key + "\"," + "[" + mongolist + "]]}}}"; 
              matchquery= "{$match:{" +"isinfilterlist" + ":true}}";
 
