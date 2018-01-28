@@ -56,8 +56,13 @@
   <ItemGroup>
     <Compile Include="Convert\Bson.cs" />
     <Compile Include="Convert\MongoQuery.cs" />
+    <Compile Include="Create\AddField.cs" />
     <Compile Include="Create\MatchQuery.cs" />
     <Compile Include="Create\MongoAddition.cs" />
+    <Compile Include="Create\MongoDivision.cs" />
+    <Compile Include="Create\MongoMultiplication.cs" />
+    <Compile Include="Create\MongoPower.cs" />
+    <Compile Include="Create\MongoSubtraction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
