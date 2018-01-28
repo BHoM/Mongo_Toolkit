@@ -11,26 +11,25 @@ namespace BH.Engine.Mongo
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoAdd( List<object> Operands)
+        public static string AddField(string Key, List<object> Items)
         {
-            string aggregatecommand = "";
-            string Operand_Array = "";
+            string MongoExpression = "";
+            string AddedVariableArray = "";
             int i = 0;
 
-            foreach (object x in Operands)
+            foreach (object x in Items)
             {
-
-                if ( x is  double || x is int)
+                if (x is double || x is int)
                 {
                     if (i == 0)
                     {
 
-                        Operand_Array = x.ToString();
+                        AddedVariableArray = x.ToString();
                     }
                     else
 
                     {
-                        Operand_Array = Operand_Array + "," + x;
+                        AddedVariableArray = AddedVariableArray + "," + x;
                     }
                 }
                 else if (x is string)
@@ -39,39 +38,40 @@ namespace BH.Engine.Mongo
                     {
                         if (i == 0)
                         {
-                            Operand_Array = "\"$" + x.ToString() + "\"";
+                            AddedVariableArray = "\"" + x.ToString() + "\"";
                         }
                         else
-
                         {
-                            string asdf = ",\"$" + x + "\"";
-                            Operand_Array = Operand_Array + asdf;
+                            string append = ",\"" + x + "\"";
+                            AddedVariableArray = AddedVariableArray + append;
                         }
                     }
-                    else
+                    else //if you are just a string, we need to add quotes to you
                     {
                         if (i == 0)
                         {
-                            Operand_Array =  x.ToString();
+                            AddedVariableArray =  x.ToString();
                         }
                         else
-
                         {
-                            Operand_Array = Operand_Array + ","+x;
+                            string append = "," + x;
+                            AddedVariableArray = AddedVariableArray + append;
                         }
                     }
                 }
                 else
                 {
-                   return aggregatecommand = "Error, Operand must be a double, integer, or a mongo db property";
+                    return MongoExpression = "Error, Operand must be a double, integer, or a mongo db document property";
                 }
 
                 i++;
 
             }
 
-            aggregatecommand =  "{$sum: [" + Operand_Array + "] }";
-            return aggregatecommand;
+            MongoExpression = "{$addFields: {" + Key + ":[" + AddedVariableArray + "] }}";
+
+
+            return MongoExpression;
         }
 
     }

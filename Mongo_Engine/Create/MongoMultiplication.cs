@@ -11,7 +11,7 @@ namespace BH.Engine.Mongo
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoAdd( List<object> Operands)
+        public static string MongoMultiplication(List<object> Operands)
         {
             string aggregatecommand = "";
             string Operand_Array = "";
@@ -20,7 +20,7 @@ namespace BH.Engine.Mongo
             foreach (object x in Operands)
             {
 
-                if ( x is  double || x is int)
+                if (x is double || x is int)
                 {
                     if (i == 0)
                     {
@@ -52,25 +52,25 @@ namespace BH.Engine.Mongo
                     {
                         if (i == 0)
                         {
-                            Operand_Array =  x.ToString();
+                            Operand_Array = x.ToString();
                         }
                         else
 
                         {
-                            Operand_Array = Operand_Array + ","+x;
+                            Operand_Array = Operand_Array + "," + x;
                         }
                     }
                 }
                 else
                 {
-                   return aggregatecommand = "Error, Operand must be a double, integer, or a mongo db property";
+                    return aggregatecommand = "Error, Operand must be a double, integer, or a mongo db property";
                 }
 
                 i++;
 
             }
 
-            aggregatecommand =  "{$sum: [" + Operand_Array + "] }";
+            aggregatecommand = "{$multiply: [" + Operand_Array + "] }";
             return aggregatecommand;
         }
 
