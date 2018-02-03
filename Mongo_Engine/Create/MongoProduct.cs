@@ -11,12 +11,13 @@ namespace BH.Engine.Mongo
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoDivision(object Numerator, object Denominator)
+        public static string MongoProduct(List<object> Operands)
         {
             string mongoExpression = "";
-            List<object> DivideVariableArray = new List<object>{ Numerator, Denominator };
-            mongoExpression = "{$divide: [" + MongoCleanVariable(DivideVariableArray,mongoExpression )+ "] }";
+            List<object> productArray = Operands;
+            mongoExpression = "{$multiply: [" + MongoCleanVariable(productArray, mongoExpression) + "] }";
             return mongoExpression;
         }
+
     }
 }

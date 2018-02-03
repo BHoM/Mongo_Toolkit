@@ -6,12 +6,12 @@ using BH.oM.Structural.Elements;
 using BH.oM.Base;
 using BH.oM.Geometry;
 using System.Threading;
-using BH.Adapter.Mongo;
 using BH.oM.Queries;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using MongoDB.Bson;
+using BH.Adapter.Mongo;
 
 namespace Mongo_Test
 {
@@ -38,11 +38,30 @@ namespace Mongo_Test
     {
         static void Main(string[] args)
         {
-            TestMongo();
+            Test();
 
             Console.Read();
+
         }
 
+        public static void Test()
+        {
+            string gg = "{asdfasdfasdsfasdf}";
+            
+            
+            List<object> asdf = new List<object> { 1};
+            List<object> asdf2 = new List<object> { 5};
+            string g = "";
+           g= BH.Engine.Mongo.Create.MongoCleanVariable(asdf, g);
+            Console.WriteLine(g);
+            List<object> fffff = new List<object> { g};
+            g = BH.Engine.Mongo.Create.MatchQueryDomain("asdf",asdf , asdf2);
+                Console.WriteLine(g);
+          
+            
+  
+        }
+        
 
         public static void TestMongo()
         {

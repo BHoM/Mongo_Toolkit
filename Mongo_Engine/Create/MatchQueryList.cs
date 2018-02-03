@@ -11,24 +11,15 @@ namespace BH.Engine.Mongo
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static List<string> MatchQuery(string Key, List<object> Filter)
+        public static List<string> MatchQueryList(string Key, List<object> Filter)
         {
             string projectquery = "";
             string matchquery = "";
             string mongolist = "";
+            string tempVar = "";
             List<string> aggregatecommand = new List<string>();
-            for (int i = 0; i < Filter.Count; i++)
-            {
-                if (mongolist != "")
-                {
-
-                    mongolist = mongolist + "," + Filter[i];
-                }
-                else
-                { 
-                        mongolist = Filter[i].ToString();
-                }
-            }
+            mongolist =  BH.Engine.Mongo.Create.MongoCleanVariable(Filter,tempVar);
+  
              projectquery = "{$addFields: {isinfilterlist: {$in: [" + "\"$" + Key + "\"," + "[" + mongolist + "]]}}}"; 
              matchquery= "{$match:{" +"isinfilterlist" + ":true}}";
 
