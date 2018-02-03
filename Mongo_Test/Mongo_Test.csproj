@@ -78,6 +78,10 @@
       <Project>{8ce32cad-9191-4690-88a2-106245cd6f9f}</Project>
       <Name>Mongo_Adapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mongo_Engine\Mongo_Engine.csproj">
+      <Project>{5bd9b0a7-8dca-4e18-8899-45874655eef7}</Project>
+      <Name>Mongo_Engine</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

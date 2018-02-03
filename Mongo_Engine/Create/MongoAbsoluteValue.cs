@@ -11,12 +11,12 @@ namespace BH.Engine.Mongo
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoDivision(object Numerator, object Denominator)
+        public static string MongoAbsVal(List<object> Item)
         {
             string mongoExpression = "";
-            List<object> DivideVariableArray = new List<object>{ Numerator, Denominator };
-            mongoExpression = "{$divide: [" + MongoCleanVariable(DivideVariableArray,mongoExpression )+ "] }";
-            return mongoExpression;
+            string tempVar = "";
+            mongoExpression = mongoExpression+","+ "{$abs:" + BH.Engine.Mongo.Create.MongoCleanVariable(Item,tempVar) + " }";
+            return mongoExpression.TrimStart(',');
         }
     }
 }

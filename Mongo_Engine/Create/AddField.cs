@@ -13,65 +13,17 @@ namespace BH.Engine.Mongo
         /***************************************************/
         public static string AddField(string Key, List<object> Items)
         {
-            string MongoExpression = "";
-            string AddedVariableArray = "";
-            int i = 0;
-
-            foreach (object x in Items)
+            string mongoExpression = "";
+            string tempVar = "";
+            if (Items.Count==1)
             {
-                if (x is double || x is int)
-                {
-                    if (i == 0)
-                    {
-
-                        AddedVariableArray = x.ToString();
-                    }
-                    else
-
-                    {
-                        AddedVariableArray = AddedVariableArray + "," + x;
-                    }
-                }
-                else if (x is string)
-                {
-                    if (!x.ToString().StartsWith("{"))  //if you are a mongo expresssion no need for quotes
-                    {
-                        if (i == 0)
-                        {
-                            AddedVariableArray = "\"" + x.ToString() + "\"";
-                        }
-                        else
-                        {
-                            string append = ",\"" + x + "\"";
-                            AddedVariableArray = AddedVariableArray + append;
-                        }
-                    }
-                    else //if you are just a string, we need to add quotes to you
-                    {
-                        if (i == 0)
-                        {
-                            AddedVariableArray =  x.ToString();
-                        }
-                        else
-                        {
-                            string append = "," + x;
-                            AddedVariableArray = AddedVariableArray + append;
-                        }
-                    }
-                }
-                else
-                {
-                    return MongoExpression = "Error, Operand must be a double, integer, or a mongo db document property";
-                }
-
-                i++;
-
+                mongoExpression = "{$addFields: {" + Key + ":" + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "}}";
             }
-
-            MongoExpression = "{$addFields: {" + Key + ":[" + AddedVariableArray + "] }}";
-
-
-            return MongoExpression;
+            else
+            {
+                mongoExpression = "{$addFields: {" + Key + ":[" + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "]}}";
+            }
+            return mongoExpression;
         }
 
     }
