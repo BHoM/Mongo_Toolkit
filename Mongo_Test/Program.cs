@@ -49,13 +49,14 @@ namespace Mongo_Test
             string gg = "{asdfasdfasdsfasdf}";
             
             
-            List<object> asdf = new List<object> { 1};
+            List<string> asdf = new List<string>();
             List<object> asdf2 = new List<object> { 5};
+            List<object> asdf3 = new List<object> { 77 };
             string g = "";
-           g= BH.Engine.Mongo.Create.MongoCleanVariable(asdf, g);
+         //  g= BH.Engine.Mongo.Create.MongoCleanVariable(asdf, g);
             Console.WriteLine(g);
             List<object> fffff = new List<object> { g};
-            g = BH.Engine.Mongo.Create.MatchQueryDomain("asdf",asdf , asdf2);
+           asdf = BH.Engine.Mongo.Create.MatchQueryDomain(asdf2,asdf2 , asdf3);
                 Console.WriteLine(g);
           
             
