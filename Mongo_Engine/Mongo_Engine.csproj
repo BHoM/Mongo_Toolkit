@@ -59,6 +59,7 @@
     <Compile Include="Create\AddField.cs" />
     <Compile Include="Create\MatchQueryList.cs" />
     <Compile Include="Create\MongoAbsoluteValue.cs" />
+    <Compile Include="Create\MongoAnd.cs" />
     <Compile Include="Create\MongoClean.cs" />
     <Compile Include="Create\MongoSum.cs" />
     <Compile Include="Create\MongoDivision.cs" />
