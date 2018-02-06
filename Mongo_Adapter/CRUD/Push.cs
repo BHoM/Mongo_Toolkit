@@ -14,7 +14,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override IEnumerable<IObject> Push(IEnumerable<IObject> objects, string tag = "", Dictionary<string, object> config = null)
+        public override List<IObject> Push(IEnumerable<IObject> objects, string tag = "", Dictionary<string, object> config = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
@@ -54,7 +54,7 @@ namespace BH.Adapter.Mongo
                 m_History.DeleteMany(Builders<BsonDocument>.Filter.Lte("__Time__", times[HistorySize]));
             m_History.InsertMany(documents);
 
-            return objects;
+            return objects.ToList();
         }
 
         /***************************************************/
