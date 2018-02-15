@@ -11,17 +11,11 @@ namespace BH.Engine.Mongo
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static List<string> MatchQueryDomain(List<object> Key, List<object> Upperbound, List<object> Lowerbound)
+        public static string MatchQueryDomain(object Key, List<object> Upperbound, List<object> Lowerbound)
         {
-            List<string> matchquery = new List<string>();
-            string domainexpression,matchexpression = "";
             string tempvar = "";
-            domainexpression = "{$addFields: {matchdomain: { $and: [{$gte: [" + BH.Engine.Mongo.Create.MongoCleanVariable(Key, tempvar) + "," + BH.Engine.Mongo.Create.MongoCleanVariable(Lowerbound, tempvar) +"]},{$lte: [" +BH.Engine.Mongo.Create.MongoCleanVariable(Key, tempvar) + "," + BH.Engine.Mongo.Create.MongoCleanVariable(Upperbound, tempvar) + "]}]}}}";
-            matchexpression = "{$match: { matchdomain:true }}";
-            matchquery.Add(domainexpression);
-            matchquery.Add(matchexpression);
-            return matchquery;
-
+            string domainexpression = " { $match: { $and: [{" + Key+ ": { $gte:"+ BH.Engine.Mongo.Create.MongoCleanVariable(Lowerbound, tempvar)+" } }, { "+Key+": { $lte:"+ BH.Engine.Mongo.Create.MongoCleanVariable(Upperbound, tempvar)+ "} } ] } }";
+            return domainexpression;
         }
 
     }

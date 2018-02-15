@@ -56,7 +56,7 @@ namespace Mongo_Test
          //  g= BH.Engine.Mongo.Create.MongoCleanVariable(asdf, g);
             Console.WriteLine(g);
             List<object> fffff = new List<object> { g};
-           asdf = BH.Engine.Mongo.Create.MatchQueryDomain(asdf2,asdf2 , asdf3);
+          // asdf = BH.Engine.Mongo.Create.MatchQueryDomain(asdf2,asdf2 , asdf3);
                 Console.WriteLine(g);
           
             
