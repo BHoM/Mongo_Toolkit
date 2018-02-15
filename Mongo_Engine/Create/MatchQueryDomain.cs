@@ -14,7 +14,7 @@ namespace BH.Engine.Mongo
         public static string MatchQueryDomain(object Key, List<object> Upperbound, List<object> Lowerbound)
         {
             string tempvar = "";
-            string domainexpression = " { $match: { $and: [{" + Key+ ": { $gte:"+ BH.Engine.Mongo.Create.MongoCleanVariable(Lowerbound, tempvar)+" } }, { "+Key+": { $lte:"+ BH.Engine.Mongo.Create.MongoCleanVariable(Upperbound, tempvar)+ "} } ] } }";
+            string domainexpression = "{$match: {$and: [{" + Key+ ": {$gte:"+ BH.Engine.Mongo.Create.MongoCleanVariable(Lowerbound, tempvar)+"}}, {"+Key+": {$lte:"+ BH.Engine.Mongo.Create.MongoCleanVariable(Upperbound, tempvar)+ "}}]}}";
             return domainexpression;
         }
 
