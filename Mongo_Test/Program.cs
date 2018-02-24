@@ -46,9 +46,6 @@ namespace Mongo_Test
 
         public static void Test()
         {
-            string gg = "{asdfasdfasdsfasdf}";
-            
-            
             List<string> asdf = new List<string>();
             List<object> asdf2 = new List<object> { 5};
             List<object> asdf3 = new List<object> { 77 };

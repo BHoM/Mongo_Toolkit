@@ -14,11 +14,11 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override List<IBHoMObject> Push(IEnumerable<IBHoMObject> objects, string tag = "", Dictionary<string, object> config = null)
+        public override List<IObject> Push(IEnumerable<IObject> objects, string tag = "", Dictionary<string, object> config = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-                return new List<IBHoMObject>();
+                return new List<IObject>();
 
             // Get the config
             bool replace = true;
