@@ -4,7 +4,7 @@ using System.Linq;
 using BH.oM.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BH.oM.Queries;
+using BH.oM.DataManipulation.Queries;
 
 namespace BH.Adapter.Mongo
 {
@@ -45,10 +45,13 @@ namespace BH.Adapter.Mongo
                 m_Collection.InsertMany(documents);
 
             // Push in the history database as well
-            BatchQuery queries = new BatchQuery(new List<IQuery> {
-                new CustomQuery("{$group: {_id: \"$__Time__\"}}"),
-                new CustomQuery("{$sort: {_id: -1}}")
-            });
+            BatchQuery queries = new BatchQuery
+            {
+                Queries = new List<IQuery> {
+                    new CustomQuery { Query = "{$group: {_id: \"$__Time__\"}}" },
+                    new CustomQuery { Query = "{$sort: {_id: -1}}" }
+                }
+            };
             List<object> times = Pull(queries) as List<object>;
             if (times.Count > HistorySize)
                 m_History.DeleteMany(Builders<BsonDocument>.Filter.Lte("__Time__", times[HistorySize]));
