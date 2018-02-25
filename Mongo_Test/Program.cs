@@ -6,7 +6,7 @@ using BH.oM.Structural.Elements;
 using BH.oM.Base;
 using BH.oM.Geometry;
 using System.Threading;
-using BH.oM.Queries;
+using BH.oM.DataManipulation.Queries;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;

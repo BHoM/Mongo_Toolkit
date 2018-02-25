@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BH.oM.Queries;
+using BH.oM.DataManipulation.Queries;
 using BH.Engine.Mongo;
 
 namespace BH.Adapter.Mongo

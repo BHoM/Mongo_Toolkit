@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using MongoDB.Driver;
-using BH.oM.Queries;
+using BH.oM.DataManipulation.Queries;
 using BH.Engine.Mongo;
 
 namespace BH.Adapter.Mongo

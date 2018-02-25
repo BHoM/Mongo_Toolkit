@@ -1,4 +1,4 @@
-﻿using BH.oM.Queries;
+﻿using BH.oM.DataManipulation.Queries;
 using MongoDB.Bson;
 
 namespace BH.Engine.Mongo
