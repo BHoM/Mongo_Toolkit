@@ -56,17 +56,23 @@
   <ItemGroup>
     <Compile Include="Convert\Bson.cs" />
     <Compile Include="Convert\MongoQuery.cs" />
-    <Compile Include="Create\AddField.cs" />
+    <Compile Include="Create\MongoAddField.cs" />
     <Compile Include="Create\MatchQueryList.cs" />
     <Compile Include="Create\MongoAbsoluteValue.cs" />
     <Compile Include="Create\MongoAnd.cs" />
     <Compile Include="Create\MongoClean.cs" />
+    <Compile Include="Create\MongoGroup.cs" />
+    <Compile Include="Create\MongoCrossRef.cs" />
+    <Compile Include="Create\MongoMin.cs" />
+    <Compile Include="Create\MongoProject.cs" />
+    <Compile Include="Create\MongoMax.cs" />
     <Compile Include="Create\MongoSum.cs" />
     <Compile Include="Create\MongoDivision.cs" />
     <Compile Include="Create\MongoProduct.cs" />
     <Compile Include="Create\MongoPower.cs" />
     <Compile Include="Create\MongoSubtraction.cs" />
     <Compile Include="Create\MatchQueryDomain.cs" />
+    <Compile Include="MongoListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

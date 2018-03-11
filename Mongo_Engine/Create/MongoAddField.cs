@@ -11,17 +11,17 @@ namespace BH.Engine.Mongo
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string AddField(string Key, List<object> Items)
+        public static string MongoAddField(string Key, List<object> Items)
         {
             string mongoExpression = "";
             string tempVar = "";
             if (Items.Count==1)
             {
-                mongoExpression = "{$addFields: {" + Key + ":" + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "}}";
+                mongoExpression = "{$addFields: {" + Key + " : " + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "}}";
             }
             else
             {
-                mongoExpression = "{$addFields: {" + Key + ":[" + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "]}}";
+                mongoExpression = "{$addFields: {" + Key + " : [" + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "]}}";
             }
             return mongoExpression;
         }
