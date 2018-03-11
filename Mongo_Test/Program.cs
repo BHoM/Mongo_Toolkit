@@ -47,19 +47,20 @@ namespace Mongo_Test
         public static void Test()
         {
             List<string> asdf = new List<string>();
-            List<object> asdf2 = new List<object> { 5};
-            List<object> asdf3 = new List<object> { 77 };
+            List<string> asdf2 = new List<string> {"Bar_Number", "Loadcase", "Force_Position"};
+            List<string> asdf3 = new List<string> {"M_X","F_X" };
             string g = "";
          //  g= BH.Engine.Mongo.Create.MongoCleanVariable(asdf, g);
             Console.WriteLine(g);
             List<object> fffff = new List<object> { g};
-           asdf = BH.Engine.Mongo.Create.MatchQueryDomain(asdf2,asdf2 , asdf3);
+            // g = BH.Engine.Mongo.Create.MongoGroup(asdf2,asdf3);
+            //     Console.WriteLine(g);
+            g = BH.Engine.Mongo.Create.MongoMax("stocazzo");
                 Console.WriteLine(g);
-          
-            
-  
+
+
         }
-        
+
 
         public static void TestMongo()
         {
