@@ -22,17 +22,17 @@ namespace BH.Engine.Mongo
             string mongoExpressionB = "";
             string mongoExpressionC = "},";
             string mongoExpressionD = "";
-            string mongoExpressionE = " }}";
+            string mongoExpressionE = " } }";
             string tempVar = "";
 
             foreach (string x in GroupBy)
             {
-                mongoExpressionB = mongoExpressionB + "," + x +":"+ "\"$" + x + "\"";
+                mongoExpressionB = mongoExpressionB + "," + x +" : "+ " \"$" + x + "\" ";
             }
 
             foreach (string x in ProjectForward)
             {
-                mongoExpressionD = mongoExpressionD + "," + x +":"+"{$push:"+ "\"$" + x + "\""+"}";
+                mongoExpressionD = mongoExpressionD + "," + x +" : "+"{$push:"+ " \"$" + x + "\" }";
             }
 
             aggregatecommand = mongoExpressionA + mongoExpressionB.TrimStart(',') + mongoExpressionC + mongoExpressionD.TrimStart(',')+mongoExpressionE;

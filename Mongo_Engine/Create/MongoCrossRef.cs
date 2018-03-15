@@ -30,7 +30,7 @@ namespace BH.Engine.Mongo
             //let: { a: "$Bar_Number", b: "$Force_Position" }
             foreach (object x in Props2Match)
             {
-                letstatement = letstatement + ", " + "othercollections_" +x+ ":\"$"+x+"\"";
+                letstatement = letstatement + ", " + "othercollections_" +x+ ": \"$"+x+"\"";
             }
 
             //pipeline: [{$match: {$expr: {$and: [{$eq: [ "$Bar_Number",  "$$a" ] }]}}}, {project}],

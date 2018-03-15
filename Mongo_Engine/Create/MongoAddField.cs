@@ -17,11 +17,11 @@ namespace BH.Engine.Mongo
             string tempVar = "";
             if (Items.Count==1)
             {
-                mongoExpression = "{$addFields: {" + Key + " : " + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "}}";
+                mongoExpression = "{$addFields: {" + Key + " : " + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + " } }";
             }
             else
             {
-                mongoExpression = "{$addFields: {" + Key + " : [" + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "]}}";
+                mongoExpression = "{$addFields: {" + Key + " : [" + BH.Engine.Mongo.Create.MongoCleanVariable(Items, tempVar) + "] } }";
             }
             return mongoExpression;
         }

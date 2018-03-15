@@ -17,7 +17,7 @@ namespace BH.Engine.Mongo
             //{$addFields: {stress:{$arrayElemAt:["$SectionArea.Area",0]}}}
             string outputquery = "";
             string mongoexpressionA = "{$arrayElemAt: [\"$";
-            string mongoexpressionB = "]}";
+            string mongoexpressionB = "] }";
 
             outputquery = mongoexpressionA + MongoArrayName + "\"," +Index+ mongoexpressionB;
 

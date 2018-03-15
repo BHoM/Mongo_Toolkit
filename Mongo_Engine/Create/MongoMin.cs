@@ -18,7 +18,7 @@ namespace BH.Engine.Mongo
 
             string outputquery = "";
             string mongoexpressionA = "{$min : \"$";
-            string mongoexpressionB = "\"}";
+            string mongoexpressionB = "\" }";
             string maxexpression = mongoexpressionA + MongoArrayName + mongoexpressionB;
             List<object> maxexpressionlist = new List<object>();
             maxexpressionlist.Add(maxexpression);
