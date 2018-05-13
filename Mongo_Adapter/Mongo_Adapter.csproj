@@ -72,7 +72,6 @@
     <Compile Include="CRUD\Pull.cs" />
     <Compile Include="CRUD\Push.cs" />
     <Compile Include="MongoAdapter.cs" />
-    <Compile Include="MongoServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

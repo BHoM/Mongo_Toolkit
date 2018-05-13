@@ -41,6 +41,14 @@
       <HintPath>..\packages\MongoDB.Bson.2.5.0\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="MongoDB.Driver, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MongoDB.Driver.2.4.4\lib\net45\MongoDB.Driver.dll</HintPath>
+    </Reference>
+    <Reference Include="MongoDB.Driver.Core, Version=2.4.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\MongoDB.Driver.Core.2.4.4\lib\net45\MongoDB.Driver.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Serialiser_Engine">
       <HintPath>..\..\BHoM_Engine\Build\Serialiser_Engine.dll</HintPath>
     </Reference>
@@ -67,6 +75,7 @@
     <Compile Include="Create\MongoMin.cs" />
     <Compile Include="Create\MongoProject.cs" />
     <Compile Include="Create\MongoMax.cs" />
+    <Compile Include="Create\MongoServer.cs" />
     <Compile Include="Create\MongoSum.cs" />
     <Compile Include="Create\MongoDivision.cs" />
     <Compile Include="Create\MongoProduct.cs" />

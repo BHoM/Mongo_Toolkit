@@ -5,19 +5,24 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.IO;
 using System.Threading;
+using MongoDB.Driver.Core;
 
-namespace BH.Adapter.Mongo
+namespace BH.Engine.Mongo
 {
-    public class MongoServer
+    public static partial class Create
     {
         /***************************************************/
-        /**** Constructors                              ****/
+        /**** Public Methods                            ****/
         /***************************************************/
 
-        public MongoServer(string folderName)
+        public static string MongoServer(string folderName)
         {
+            string alert = "";
+
             if (m_Process != null && !m_Process.HasExited && m_FolderName != folderName)
-                throw new Exception("A Mongo Server is already running you machine.");
+            {
+                alert = "A Mongo Server is already running you machine.";
+            }
 
             if (m_Process == null || m_Process.HasExited) 
             {
@@ -31,7 +36,9 @@ namespace BH.Adapter.Mongo
 
                 Thread.Sleep(1000);
                 m_Client = new MongoClient(@"mongodb://localhost:27017");
+                alert = "MongoDB Files Stored in " + folderName;
             }
+            return alert;
         }
 
 
@@ -39,7 +46,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public List<string> Databases()
+        public static List<string> Databases()
         {
             List<BsonDocument> bsonList = m_Client.ListDatabases().ToList();
 
@@ -48,7 +55,7 @@ namespace BH.Adapter.Mongo
 
         /***************************************************/
 
-        public bool DeleteDatabase(string name)
+        public static bool DeleteDatabase(string name)
         {
             m_Client.DropDatabase(name);
             return true;
@@ -59,7 +66,7 @@ namespace BH.Adapter.Mongo
         /**** Private Methods                           ****/
         /***************************************************/
 
-        private void M_Process_Exited(object sender, EventArgs e)
+        private static void M_Process_Exited(object sender, EventArgs e)
         {
             m_Process = null;
             m_FolderName = "";
@@ -73,7 +80,7 @@ namespace BH.Adapter.Mongo
         /**** Private Fields                            ****/
         /***************************************************/
 
-        public event Action Killed; 
+        public static event Action Killed; 
 
         private static string m_FolderName = "";
         private static MongoClient m_Client = null;
