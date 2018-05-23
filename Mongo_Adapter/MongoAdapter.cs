@@ -31,6 +31,26 @@ namespace BH.Adapter.Mongo
             m_History = hist_Database.GetCollection<BsonDocument>(collectionName);
         }
 
+        /***************************************************/
+
+        public MongoAdapter(string connectionString, string databaseName = "project", string collectionName = "bhomObjects")
+        {
+
+            AdapterId = "Mongo_id";
+            if (!connectionString.StartsWith("mongodb://"))
+                connectionString = "mongodb://" + connectionString;
+
+            MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
+            settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
+            m_Client = new MongoClient(settings);
+
+            IMongoDatabase database = m_Client.GetDatabase(databaseName);
+            m_Collection = database.GetCollection<BsonDocument>(collectionName);
+
+            IMongoDatabase hist_Database = m_Client.GetDatabase(databaseName + "_History");
+            m_History = hist_Database.GetCollection<BsonDocument>(collectionName);
+        }
+
 
         /***************************************************/
         /**** Public Methods                            ****/
