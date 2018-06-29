@@ -12,6 +12,7 @@ using MongoDB.Bson.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using MongoDB.Bson;
 using BH.Adapter.Mongo;
+using MongoDB.Driver;
 
 namespace Mongo_Test
 {
@@ -38,10 +39,25 @@ namespace Mongo_Test
     {
         static void Main(string[] args)
         {
-            Test();
+            //Test();
+
+            TestConnection();
 
             Console.Read();
 
+        }
+
+        private static void TestConnection()
+        {
+            string s = "mongodb://BHoMTester:bhomtest1@ds018708.mlab.com:18708/bhom_test_status";
+
+            //string s = "mongodb://BHoMTester:bhomtest1@ds018708.mlab.com:18708";
+
+            MongoClient client = new MongoClient(s);
+
+            Thread.Sleep(2000);
+
+            bool connected = client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Connected;
         }
 
         public static void Test()
