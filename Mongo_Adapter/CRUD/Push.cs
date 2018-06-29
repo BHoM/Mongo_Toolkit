@@ -45,18 +45,20 @@ namespace BH.Adapter.Mongo
                 m_Collection.InsertMany(documents);
 
             // Push in the history database as well
-            BatchQuery queries = new BatchQuery
+            if (m_useHistory)
             {
-                Queries = new List<IQuery> {
+                BatchQuery queries = new BatchQuery
+                {
+                    Queries = new List<IQuery> {
                     new CustomQuery { Query = "{$group: {_id: \"$__Time__\"}}" },
                     new CustomQuery { Query = "{$sort: {_id: -1}}" }
                 }
-            };
-            List<object> times = Pull(queries) as List<object>;
-            if (times.Count > HistorySize)
-                m_History.DeleteMany(Builders<BsonDocument>.Filter.Lte("__Time__", times[HistorySize]));
-            m_History.InsertMany(documents);
-
+                };
+                List<object> times = Pull(queries) as List<object>;
+                if (times.Count > HistorySize)
+                    m_History.DeleteMany(Builders<BsonDocument>.Filter.Lte("__Time__", times[HistorySize]));
+                m_History.InsertMany(documents);
+            }
             return objects.ToList();
         }
 
