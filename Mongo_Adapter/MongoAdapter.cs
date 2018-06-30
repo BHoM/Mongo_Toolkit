@@ -20,8 +20,6 @@ namespace BH.Adapter.Mongo
         {
             AdapterId = "Mongo_id";
 
-            m_useHistory = useHistory;
-
             if (!serverName.StartsWith("mongodb://"))
                 serverName = "mongodb://" + serverName;
 
@@ -29,7 +27,7 @@ namespace BH.Adapter.Mongo
             IMongoDatabase database = m_Client.GetDatabase(databaseName);
             m_Collection = database.GetCollection<BsonDocument>(collectionName);
 
-            if (m_useHistory)
+            if (useHistory)
             {
                 IMongoDatabase hist_Database = m_Client.GetDatabase(databaseName + "_History");
                 m_History = hist_Database.GetCollection<BsonDocument>(collectionName);
@@ -45,8 +43,6 @@ namespace BH.Adapter.Mongo
             if (!connectionString.StartsWith("mongodb://"))
                 connectionString = "mongodb://" + connectionString;
 
-            m_useHistory = useHistory;
-
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
             m_Client = new MongoClient(settings);
@@ -54,7 +50,7 @@ namespace BH.Adapter.Mongo
             IMongoDatabase database = m_Client.GetDatabase(databaseName);
             m_Collection = database.GetCollection<BsonDocument>(collectionName);
 
-            if (m_useHistory)
+            if (useHistory)
             {
                 IMongoDatabase hist_Database = m_Client.GetDatabase(databaseName + "_History");
                 m_History = hist_Database.GetCollection<BsonDocument>(collectionName);
@@ -92,9 +88,8 @@ namespace BH.Adapter.Mongo
         /***************************************************/
 
         private MongoClient m_Client;
-        private IMongoCollection<BsonDocument> m_Collection;
-        private IMongoCollection<BsonDocument> m_History;
-        private bool m_useHistory;
+        private IMongoCollection<BsonDocument> m_Collection = null;
+        private IMongoCollection<BsonDocument> m_History = null;
 
 
         /***************************************************/
