@@ -45,7 +45,7 @@ namespace BH.Adapter.Mongo
                 m_Collection.InsertMany(documents);
 
             // Push in the history database as well
-            if (m_useHistory)
+            if (m_History != null)
             {
                 BatchQuery queries = new BatchQuery
                 {
