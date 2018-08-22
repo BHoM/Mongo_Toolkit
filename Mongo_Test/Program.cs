@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using BH.oM.Structural.Elements;
+using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Geometry;
 using System.Threading;
