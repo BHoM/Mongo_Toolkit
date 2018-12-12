@@ -23,7 +23,6 @@ namespace BH.Engine.Mongo
             string mongoExpressionC = "},";
             string mongoExpressionD = "";
             string mongoExpressionE = " } }";
-            string tempVar = "";
 
             foreach (string x in GroupBy)
             {
