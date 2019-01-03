@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.IO;
-using BH.oM.Structure.Elements;
 using BH.oM.Base;
 using BH.oM.Geometry;
 using System.Threading;
@@ -102,12 +101,7 @@ namespace Mongo_Test
 
         public static void TestMongo()
         {
-            List<BHoMObject> nodes = new List<BHoMObject>
-            {
-                new Node { Position = new Point { X = 1, Y = 2, Z = 3}, Name = "A"},
-                new Node { Position = new Point { X = 4, Y = 5, Z = 6}, Name = "B"},
-                new Node { Position = new Point { X = 7, Y = 8, Z = 9}, Name = "C"}
-            };
+
 
             /*List<object> items = new List<object> //TODO: Turn this into Custom BHoMObjects
             {
@@ -136,13 +130,6 @@ namespace Mongo_Test
 
         public static void TestBson()
         {
-            List<BHoMObject> nodes = new List<BHoMObject>
-            {
-                new Node { Position = new Point { X = 1, Y = 2, Z = 3}, Name = "A"},
-                new Node { Position = new Point { X = 4, Y = 5, Z = 6}, Name = "B"},
-                new Node { Position = new Point { X = 7, Y = 8, Z = 9}, Name = "C"}
-            };
-
 
             List<object> items = new List<object>
             {
@@ -151,8 +138,6 @@ namespace Mongo_Test
                 new C { a = 3, c = 56 },
                 new D { a = 4, b = 67, d = 123 },
                 new E { a = 5, c = 78, e = 456 },
-                new Node { Position = new Point { X = 1, Y = 2, Z = 3}, Name = "A"},
-                nodes,
                 new Dictionary<string, A> {
                     { "A",  new A { a = 1 } },
                     { "C",  new C { a = 3, c = 56 } },
