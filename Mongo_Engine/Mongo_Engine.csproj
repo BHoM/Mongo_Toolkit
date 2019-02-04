@@ -30,12 +30,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BHoM, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="BHoM">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\BHoM\Build\BHoM.dll</HintPath>
     </Reference>
     <Reference Include="BHoM_Engine">
       <HintPath>..\..\BHoM_Engine\Build\BHoM_Engine.dll</HintPath>
+    </Reference>
+    <Reference Include="DataManipulation_oM">
+      <HintPath>..\..\BHoM\Build\DataManipulation_oM.dll</HintPath>
     </Reference>
     <Reference Include="MongoDB.Bson, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.5.0\lib\net45\MongoDB.Bson.dll</HintPath>
