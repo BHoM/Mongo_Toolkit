@@ -16,7 +16,7 @@ namespace BH.Engine.Mongo
             string projectquery = "";
             string matchquery = "";
             string mongolist ="";
-            string tempVar = "";
+
             List<string> aggregatecommand = new List<string>();
 
             int i = 0;
