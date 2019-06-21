@@ -20,7 +20,7 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using BH.oM.DataManipulation.Queries;
+using BH.oM.Data.Requests;
 using MongoDB.Bson;
 
 namespace BH.Engine.Mongo
@@ -31,7 +31,7 @@ namespace BH.Engine.Mongo
         /**** Public Interface                           ****/
         /***************************************************/
 
-        public static BsonDocument IToMongoQuery(this IQuery query)
+        public static BsonDocument IToMongoQuery(this IRequest query)
         {
             return ToMongoQuery(query as dynamic);
         }
@@ -41,14 +41,14 @@ namespace BH.Engine.Mongo
         /**** Private  Methods - Curves                 ****/
         /***************************************************/
 
-        public static BsonDocument ToMongoQuery(this CustomQuery query)
+        public static BsonDocument ToMongoQuery(this CustomRequest query)
         {
             return BsonDocument.Parse(query.Query);
         }
 
         /***************************************************/
 
-        public static BsonDocument ToMongoQuery(this FilterQuery query)
+        public static BsonDocument ToMongoQuery(this FilterRequest query)
         {
             BsonDocument document = new BsonDocument();
 

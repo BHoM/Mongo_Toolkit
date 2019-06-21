@@ -27,7 +27,7 @@ using System.IO;
 using BH.oM.Base;
 using BH.oM.Geometry;
 using System.Threading;
-using BH.oM.DataManipulation.Queries;
+using BH.oM.Data.Requests;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -124,7 +124,7 @@ namespace Mongo_Test
 
             Thread.Sleep(1000);
 
-            FilterQuery filter = new FilterQuery { Equalities = new Dictionary<string, object> { { "publicField", -4 } } };
+            FilterRequest filter = new FilterRequest { Equalities = new Dictionary<string, object> { { "publicField", -4 } } };
             List<object> result = link.Pull(filter) as List<object>;
         }
 

@@ -25,7 +25,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BH.oM.DataManipulation.Queries;
+using BH.oM.Data.Requests;
 using BH.Engine.Mongo;
 
 namespace BH.Adapter.Mongo
@@ -36,7 +36,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override IEnumerable<object> Pull(IQuery query, Dictionary<string, object> config = null)
+        public override IEnumerable<object> Pull(IRequest query, Dictionary<string, object> config = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
@@ -44,8 +44,8 @@ namespace BH.Adapter.Mongo
 
             // Get the results
             List<BsonDocument> pipeline = new List<BsonDocument>();
-            if (query is BatchQuery)
-                pipeline = ((BatchQuery)query).Queries.Select(s => s.IToMongoQuery()).ToList();
+            if (query is BatchRequest)
+                pipeline = ((BatchRequest)query).Queries.Select(s => s.IToMongoQuery()).ToList();
             else
                 pipeline.Add(query.IToMongoQuery());
             var aggregateOptions = new AggregateOptions() { AllowDiskUse = true };

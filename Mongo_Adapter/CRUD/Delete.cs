@@ -22,7 +22,7 @@
 
 using System.Collections.Generic;
 using MongoDB.Driver;
-using BH.oM.DataManipulation.Queries;
+using BH.oM.Data.Requests;
 using BH.Engine.Mongo;
 
 namespace BH.Adapter.Mongo
@@ -33,7 +33,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override int Delete(FilterQuery filter, Dictionary<string, object> config = null)
+        public override int Delete(FilterRequest filter, Dictionary<string, object> config = null)
         {
             DeleteResult result = m_Collection.DeleteMany(filter.ToMongoQuery());
             return (int)result.DeletedCount;

@@ -26,7 +26,7 @@ using System.Linq;
 using BH.oM.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BH.oM.DataManipulation.Queries;
+using BH.oM.Data.Requests;
 
 namespace BH.Adapter.Mongo
 {
@@ -69,11 +69,11 @@ namespace BH.Adapter.Mongo
             // Push in the history database as well
             if (m_History != null)
             {
-                BatchQuery queries = new BatchQuery
+                BatchRequest queries = new BatchRequest
                 {
-                    Queries = new List<IQuery> {
-                    new CustomQuery { Query = "{$group: {_id: \"$__Time__\"}}" },
-                    new CustomQuery { Query = "{$sort: {_id: -1}}" }
+                    Queries = new List<IRequest> {
+                    new CustomRequest { Query = "{$group: {_id: \"$__Time__\"}}" },
+                    new CustomRequest { Query = "{$sort: {_id: -1}}" }
                 }
                 };
                 List<object> times = Pull(queries) as List<object>;

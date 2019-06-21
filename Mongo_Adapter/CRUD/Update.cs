@@ -24,7 +24,7 @@ using System;
 using System.Collections.Generic;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using BH.oM.DataManipulation.Queries;
+using BH.oM.Data.Requests;
 using BH.Engine.Mongo;
 
 namespace BH.Adapter.Mongo
@@ -35,7 +35,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override int UpdateProperty(FilterQuery filter, string property, object newValue, Dictionary<string, object> config = null)
+        public override int UpdateProperty(FilterRequest filter, string property, object newValue, Dictionary<string, object> config = null)
         {
             BsonDocument definition = new BsonDocument();
             definition["__Time__"] = DateTime.Now;
