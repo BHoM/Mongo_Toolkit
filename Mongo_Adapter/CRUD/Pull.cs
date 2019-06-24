@@ -45,7 +45,7 @@ namespace BH.Adapter.Mongo
             // Get the results
             List<BsonDocument> pipeline = new List<BsonDocument>();
             if (query is BatchRequest)
-                pipeline = ((BatchRequest)query).Queries.Select(s => s.IToMongoQuery()).ToList();
+                pipeline = ((BatchRequest)query).Requests.Select(s => s.IToMongoQuery()).ToList();
             else
                 pipeline.Add(query.IToMongoQuery());
             var aggregateOptions = new AggregateOptions() { AllowDiskUse = true };

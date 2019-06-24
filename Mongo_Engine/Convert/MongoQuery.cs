@@ -43,7 +43,7 @@ namespace BH.Engine.Mongo
 
         public static BsonDocument ToMongoQuery(this CustomRequest query)
         {
-            return BsonDocument.Parse(query.Query);
+            return BsonDocument.Parse(query.Body);
         }
 
         /***************************************************/
