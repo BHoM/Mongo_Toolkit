@@ -71,9 +71,9 @@ namespace BH.Adapter.Mongo
             {
                 BatchRequest queries = new BatchRequest
                 {
-                    Queries = new List<IRequest> {
-                    new CustomRequest { Query = "{$group: {_id: \"$__Time__\"}}" },
-                    new CustomRequest { Query = "{$sort: {_id: -1}}" }
+                    Requests = new List<IRequest> {
+                    new CustomRequest { Body = "{$group: {_id: \"$__Time__\"}}" },
+                    new CustomRequest { Body = "{$sort: {_id: -1}}" }
                 }
                 };
                 List<object> times = Pull(queries) as List<object>;
