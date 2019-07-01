@@ -72,6 +72,7 @@ namespace BH.Adapter.Mongo
         [Input("databaseName", "name of the database itself")]
         [Input("collectionName", "name of the collection you want to access inside that database")]
         [Input("useHistory", "If true, will store a copy of the data pushed to Mongo in a separate collection. Data from the last 5 pushes is available there")]
+        [Output("adapter", "Adapter to Mongo Database")]
         public MongoAdapter(string connectionString, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = false)
         {
 
