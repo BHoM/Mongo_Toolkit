@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.757
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo_Adapter", "Mongo_Adapter\Mongo_Adapter.csproj", "{8CE32CAD-9191-4690-88A2-106245CD6F9F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo_Test", "Mongo_Test\Mongo_Test.csproj", "{904B7BEB-4B17-461D-840A-CAB29FCA0995}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mongo_Engine", "Mongo_Engine\Mongo_Engine.csproj", "{5BD9B0A7-8DCA-4E18-8899-45874655EEF7}"
 EndProject
@@ -19,10 +17,6 @@ Global
 		{8CE32CAD-9191-4690-88A2-106245CD6F9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8CE32CAD-9191-4690-88A2-106245CD6F9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8CE32CAD-9191-4690-88A2-106245CD6F9F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{904B7BEB-4B17-461D-840A-CAB29FCA0995}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{904B7BEB-4B17-461D-840A-CAB29FCA0995}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{904B7BEB-4B17-461D-840A-CAB29FCA0995}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{904B7BEB-4B17-461D-840A-CAB29FCA0995}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5BD9B0A7-8DCA-4E18-8899-45874655EEF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5BD9B0A7-8DCA-4E18-8899-45874655EEF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5BD9B0A7-8DCA-4E18-8899-45874655EEF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -30,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2BC18598-B42E-4EAA-B859-02B2B6A55BB9}
 	EndGlobalSection
 EndGlobal
