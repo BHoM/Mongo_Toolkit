@@ -24,6 +24,7 @@ using System.Collections.Generic;
 using MongoDB.Driver;
 using BH.oM.Data.Requests;
 using BH.Engine.Mongo;
+using MongoDB.Bson;
 
 namespace BH.Adapter.Mongo
 {
@@ -35,7 +36,12 @@ namespace BH.Adapter.Mongo
 
         public override int Delete(FilterRequest filter, Dictionary<string, object> config = null)
         {
-            DeleteResult result = m_Collection.DeleteMany(filter.ToMongoQuery());
+            BsonDocument query = filter.ToMongoQuery();
+            BsonDocument request = query.GetElement("$match").Value.AsBsonDocument;
+            if (query == null)
+                return 0;
+
+            DeleteResult result = m_Collection.DeleteMany(request);
             return (int)result.DeletedCount;
         }
 
