@@ -39,10 +39,63 @@ namespace BH.Adapter.Mongo
         {
             BsonDocument definition = new BsonDocument();
             definition["__Time__"] = DateTime.Now;
-            definition[property] = newValue.ToBson();
+            definition[property] = GetBsonValue(newValue);
 
-            UpdateResult result = m_Collection.UpdateMany(filter.ToMongoQuery(), definition);
+            BsonDocument setter = new BsonDocument { { "$set", definition } };
+            BsonDocument request = filter.ToMongoQuery().GetElement("$match").Value.AsBsonDocument;
+
+            UpdateResult result = m_Collection.UpdateMany(request, setter);
             return (int)result.ModifiedCount;
+        }
+
+
+        /***************************************************/
+        /**** Private Methods                           ****/
+        /***************************************************/
+
+        private BsonValue GetBsonValue(object value)
+        {
+            if (value == null)
+                return BsonNull.Value;
+
+            Type type = value.GetType();
+
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.Boolean:
+                    return new BsonBoolean((bool)value);
+
+                case TypeCode.DateTime:
+                    return new BsonDateTime(BsonUtils.ToUniversalTime((DateTime)value));
+
+                case TypeCode.Double:
+                    return new BsonDouble((double)value);
+
+                case TypeCode.Int16:
+                    return new BsonInt32((short)value);
+
+                case TypeCode.Int32:
+                    return new BsonInt32((int)value);
+
+                case TypeCode.Int64:
+                    return new BsonInt64((long)value);
+
+                case TypeCode.Object:
+                    if (type == typeof(Decimal128))
+                        return new BsonDecimal128((Decimal128)value);
+                    else if (type == typeof(Guid))
+                        return new BsonBinaryData((Guid)value, GuidRepresentation.Standard);
+                    else if (type == typeof(ObjectId))
+                        return new BsonObjectId((ObjectId)value);
+                    else
+                        return value.ToBson();
+
+                case TypeCode.String:
+                    return new BsonString((string)value);
+
+                default:
+                    return value.ToBson();
+            }
         }
 
         /***************************************************/
