@@ -22,6 +22,7 @@
 
 using BH.oM.Data.Requests;
 using MongoDB.Bson;
+using System.Linq;
 
 namespace BH.Engine.Mongo
 {
@@ -63,6 +64,41 @@ namespace BH.Engine.Mongo
             document.Add(new BsonElement("$match", equalities));
 
             return document;
+        }
+
+        /***************************************************/
+
+        public static BsonDocument ToMongoQuery(this IResultRequest query)
+        {
+            BsonDocument document = new BsonDocument();
+
+            // Define the match
+            BsonDocument equalities = new BsonDocument();
+
+            if (query.Cases != null && query.Cases.Count > 0)
+            {
+                BsonDocument cases = new BsonDocument();
+                cases["$in"] = new BsonArray(query.Cases);
+                equalities["ResultCase"] = cases;
+            }
+            if (query.ObjectIds != null && query.ObjectIds.Count > 0)
+            {
+                BsonDocument ids = new BsonDocument();
+                ids["$in"] = new BsonArray(query.ObjectIds);
+                equalities["ObjectId"] = ids;
+            }
+
+            document.Add(new BsonElement("$match", equalities));
+
+            return document;
+        }
+
+
+        /***************************************************/
+
+        private static BsonDocument ToMongoQuery(this IRequest query)
+        {
+            return new BsonDocument();
         }
 
         /***************************************************/

@@ -34,9 +34,9 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override int Delete(FilterRequest filter, Dictionary<string, object> config = null)
+        public override int Delete(IRequest filter, Dictionary<string, object> config = null)
         {
-            BsonDocument query = filter.ToMongoQuery();
+            BsonDocument query = filter.IToMongoQuery();
             BsonDocument request = query.GetElement("$match").Value.AsBsonDocument;
             if (query == null)
                 return 0;
