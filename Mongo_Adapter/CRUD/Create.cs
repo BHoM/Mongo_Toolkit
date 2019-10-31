@@ -30,7 +30,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        protected override bool Create<T>(IEnumerable<T> objects, bool replaceAll = false) 
+        protected override bool Create<T>(IEnumerable<T> objects) 
         {
             return false;
         }
