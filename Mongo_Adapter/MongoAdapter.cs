@@ -55,6 +55,11 @@ namespace BH.Adapter.Mongo
                 serverName = "mongodb://" + serverName;
 
             m_Client = new MongoClient(serverName + ":" + port.ToString());
+
+            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                throw new MongoException($"Connection to the host server {serverName} " +
+                    $"on port {port} failed");
+
             IMongoDatabase database = m_Client.GetDatabase(databaseName);
             m_Collection = database.GetCollection<BsonDocument>(collectionName);
 
@@ -83,6 +88,10 @@ namespace BH.Adapter.Mongo
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
             m_Client = new MongoClient(settings);
+
+            if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                throw new MongoException($"Connection to the host server {settings.Server.Host} " +
+                    $"on port {settings.Server.Port} failed using credentials {settings.Credentials}");
 
             IMongoDatabase database = m_Client.GetDatabase(databaseName);
             m_Collection = database.GetCollection<BsonDocument>(collectionName);
