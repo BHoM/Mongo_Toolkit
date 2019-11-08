@@ -57,8 +57,11 @@ namespace BH.Adapter.Mongo
             m_Client = new MongoClient(serverName + ":" + port.ToString());
 
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-                throw new MongoException($"Connection to the host server {serverName} " +
+            {
+                BH.Engine.Reflection.Compute.RecordError($"Connection to the host server {serverName} " +
                     $"on port {port} failed");
+                return;
+            }
 
             IMongoDatabase database = m_Client.GetDatabase(databaseName);
             m_Collection = database.GetCollection<BsonDocument>(collectionName);
@@ -90,8 +93,11 @@ namespace BH.Adapter.Mongo
             m_Client = new MongoClient(settings);
 
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-                throw new MongoException($"Connection to the host server {settings.Server.Host} " +
+            {
+                Engine.Reflection.Compute.RecordError($"Connection to the host server {settings.Server.Host} " +
                     $"on port {settings.Server.Port} failed using credentials {settings.Credentials}");
+                return;
+            }
 
             IMongoDatabase database = m_Client.GetDatabase(databaseName);
             m_Collection = database.GetCollection<BsonDocument>(collectionName);
