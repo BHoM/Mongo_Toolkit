@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using BH.oM.Adapter;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -33,17 +34,20 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override bool Execute(string command, Dictionary<string, object> parameters = null, Dictionary<string, object> config = null)
+        public override bool Execute(string command, Dictionary<string, object> parameters = null, ActionConfig actionConfig = null)
         {
             switch (command)
             {
                 case "Transfer":
                     if (parameters != null && parameters.ContainsKey("Destination"))
                     {
-                        bool replaceContent = false;
-                        if (config != null && config.ContainsKey("Replace"))
-                            bool.TryParse(config["Replace"] as string, out replaceContent);
-                        return MoveCollection(parameters["Destination"] as MongoAdapter, replaceContent);
+                        //bool replaceContent = false;
+                        //if (config != null && config.ContainsKey("Replace"))
+                        //    bool.TryParse(config["Replace"] as string, out replaceContent);
+                        //return MoveCollection(parameters["Destination"] as MongoAdapter, replaceContent);
+                        if (actionConfig == null)
+                            actionConfig = new BH.oM.Adapter.Mongo.MongoConfig();
+                        
                     }
                     break;
             }

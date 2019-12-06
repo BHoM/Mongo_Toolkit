@@ -24,6 +24,7 @@ using BH.oM.Reflection.Attributes;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.ComponentModel;
+using BH.oM.Adapter.Mongo;
 
 namespace BH.Adapter.Mongo
 {
@@ -49,7 +50,7 @@ namespace BH.Adapter.Mongo
         [Output("adapter", "Adapter to Mongo Database")]
         public MongoAdapter(string serverName = "mongodb://localhost", int port = 27017, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = true)
         {
-            AdapterId = "Mongo_id";
+            AdapterIdName = "Mongo_id";
 
             if (!serverName.StartsWith("mongodb://"))
                 serverName = "mongodb://" + serverName;
@@ -84,7 +85,7 @@ namespace BH.Adapter.Mongo
         public MongoAdapter(string connectionString, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = false)
         {
 
-            AdapterId = "Mongo_id";
+            AdapterIdName = "Mongo_id";
             if (!connectionString.StartsWith("mongodb://"))
                 connectionString = "mongodb://" + connectionString;
 
