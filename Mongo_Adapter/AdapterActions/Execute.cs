@@ -23,6 +23,7 @@
 using System;
 using System.Collections.Generic;
 using BH.oM.Adapter;
+using BH.oM.Adapter.Mongo;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -41,13 +42,14 @@ namespace BH.Adapter.Mongo
                 case "Transfer":
                     if (parameters != null && parameters.ContainsKey("Destination"))
                     {
-                        //bool replaceContent = false;
-                        //if (config != null && config.ContainsKey("Replace"))
-                        //    bool.TryParse(config["Replace"] as string, out replaceContent);
-                        //return MoveCollection(parameters["Destination"] as MongoAdapter, replaceContent);
-                        if (actionConfig == null)
-                            actionConfig = new BH.oM.Adapter.Mongo.MongoConfig();
-                        
+                        // Get the config
+                        bool replaceContent = false;
+
+                        MongoConfig mongoConfig = actionConfig as MongoConfig;
+                        if (actionConfig != null)
+                            replaceContent = mongoConfig.Replace;
+
+                        return MoveCollection(parameters["Destination"] as MongoAdapter, replaceContent);
                     }
                     break;
             }
