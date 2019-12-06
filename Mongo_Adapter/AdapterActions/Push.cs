@@ -27,6 +27,8 @@ using BH.oM.Base;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using BH.oM.Data.Requests;
+using BH.oM.Adapter;
+using BH.oM.Adapter.Mongo;
 
 namespace BH.Adapter.Mongo
 {
@@ -36,20 +38,19 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override List<IObject> Push(IEnumerable<IObject> objects, string tag = "", Dictionary<string, object> config = null)
+        public override List<object> Push(IEnumerable<object> objects, string tag = "", PushType pushType = PushType.AdapterDefault, ActionConfig actionConfig = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
-                return new List<IObject>();
+                return new List<object>();
 
             // Get the config
             bool replace = true;
-            if (config != null)
+            MongoConfig mongoConfig = actionConfig as MongoConfig;
+            if (actionConfig != null)
             {
-                if (config.ContainsKey("Tag"))
-                    tag = config["Tag"] as string;
-                if (config.ContainsKey("Replace"))
-                    bool.TryParse(config["Replace"] as string, out replace);
+                tag = mongoConfig.Tag;
+                replace = mongoConfig.Replace;
             }
 
             // Create the bulk query for the object to replace/insert

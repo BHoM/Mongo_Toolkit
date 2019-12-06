@@ -27,6 +27,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using BH.oM.Data.Requests;
 using BH.Engine.Mongo;
+using BH.oM.Adapter;
 
 namespace BH.Adapter.Mongo
 {
@@ -36,7 +37,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override IEnumerable<object> Pull(IRequest query, Dictionary<string, object> config = null)
+        public override IEnumerable<object> Pull(IRequest query, PullType pullType = PullType.AdapterDefault, ActionConfig actionConfig = null)
         {
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)

@@ -25,6 +25,7 @@ using MongoDB.Driver;
 using BH.oM.Data.Requests;
 using BH.Engine.Mongo;
 using MongoDB.Bson;
+using BH.oM.Adapter;
 
 namespace BH.Adapter.Mongo
 {
@@ -34,7 +35,7 @@ namespace BH.Adapter.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override int Delete(IRequest filter, Dictionary<string, object> config = null)
+        public override int Remove(IRequest filter, ActionConfig actionConfig = null)
         {
             BsonDocument query = filter.IToMongoQuery();
             BsonDocument request = query.GetElement("$match").Value.AsBsonDocument;
