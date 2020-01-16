@@ -23,38 +23,35 @@
 using System;
 using System.Collections.Generic;
 using BH.oM.Adapter;
+using BH.oM.Adapter.Commands;
 using BH.oM.Adapter.Mongo;
+using BH.oM.Mongo.Commands;
+using BH.oM.Reflection;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace BH.Adapter.Mongo
 {
-    public partial class MongoAdapter 
+    public partial class MongoAdapter
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public override bool Execute(string command, Dictionary<string, object> parameters = null, ActionConfig actionConfig = null)
+        public override Output<List<object>, bool> Execute(IExecuteCommand command, ActionConfig actionConfig = null)
         {
-            switch (command)
+            var result = new Output<List<object>, bool> { Item1 = null, Item2 = false };
+
+            if (command is Transfer)
             {
-                case "Transfer":
-                    if (parameters != null && parameters.ContainsKey("Destination"))
-                    {
-                        // Get the config
-                        bool replaceContent = false;
+                var transferCmd = command as Transfer;
 
-                        MongoConfig mongoConfig = actionConfig as MongoConfig;
-                        if (actionConfig != null)
-                            replaceContent = mongoConfig.Replace;
+                result.Item2 = MoveCollection(transferCmd.Destination as MongoAdapter, transferCmd.ReplaceContent);
 
-                        return MoveCollection(parameters["Destination"] as MongoAdapter, replaceContent);
-                    }
-                    break;
+                return result;
             }
-
-            throw new NotImplementedException(command + " is not a recognised command for the Mongo adapter.");
+            else
+                throw new NotImplementedException(command + " is not a recognised command for the Mongo adapter.");
         }
 
 
