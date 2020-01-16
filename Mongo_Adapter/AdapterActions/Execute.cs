@@ -42,11 +42,12 @@ namespace BH.Adapter.Mongo
         {
             var result = new Output<List<object>, bool> { Item1 = null, Item2 = false };
 
-            if (command is Transfer)
-            {
-                var transferCmd = command as Transfer;
+            var transferCmd = command as Transfer;
+            var destination = transferCmd.Destination as MongoAdapter;
 
-                result.Item2 = MoveCollection(transferCmd.Destination as MongoAdapter, transferCmd.ReplaceContent);
+            if (transferCmd != null && destination != null)
+            {
+                result.Item2 = MoveCollection(destination, transferCmd.ReplaceContent);
 
                 return result;
             }
