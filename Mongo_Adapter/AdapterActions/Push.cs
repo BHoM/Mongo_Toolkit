@@ -47,7 +47,7 @@ namespace BH.Adapter.Mongo
             // Get the config
             bool replace = true;
             MongoConfig mongoConfig = actionConfig as MongoConfig;
-            if (actionConfig != null)
+            if (mongoConfig != null)
             {
                 tag = mongoConfig.Tag;
                 replace = mongoConfig.Replace;
