@@ -49,7 +49,7 @@ namespace BH.Adapter.Mongo
                 pipeline = ((BatchRequest)query).Requests.Select(s => s.IToMongoQuery()).ToList();
             else
                 pipeline.Add(query.IToMongoQuery());
-            var aggregateOptions = new AggregateOptions() { AllowDiskUse = true };
+            AggregateOptions aggregateOptions = new AggregateOptions() { AllowDiskUse = true };
             List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
 
             // Return as objects
