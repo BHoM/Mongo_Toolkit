@@ -40,10 +40,10 @@ namespace BH.Adapter.Mongo
 
         public override Output<List<object>, bool> Execute(IExecuteCommand command, ActionConfig actionConfig = null)
         {
-            var result = new Output<List<object>, bool> { Item1 = null, Item2 = false };
+            Output<List<object>, bool> result = new Output<List<object>, bool> { Item1 = null, Item2 = false };
 
-            var transferCmd = command as Transfer;
-            var destination = transferCmd.Destination as MongoAdapter;
+            Transfer transferCmd = command as Transfer;
+            MongoAdapter destination = transferCmd.Destination as MongoAdapter;
 
             if (transferCmd != null && destination != null)
             {
@@ -65,8 +65,8 @@ namespace BH.Adapter.Mongo
             try
             {
                 //Access the admin namespace and admin db needed to be able to rename collections
-                var adminDBNameSpace = DatabaseNamespace.Admin;
-                var adminDb = m_Client.GetDatabase(adminDBNameSpace.DatabaseName);
+                DatabaseNamespace adminDBNameSpace = DatabaseNamespace.Admin;
+                IMongoDatabase adminDb = m_Client.GetDatabase(adminDBNameSpace.DatabaseName);
 
                 //Create the renaming command
                 Command<BsonDocument> command = "{ renameCollection: \"" +
