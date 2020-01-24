@@ -7,8 +7,8 @@
     <ProjectGuid>{62D0B8AE-646C-46F1-8C28-1AED1ED73D54}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mongo_oM1</RootNamespace>
-    <AssemblyName>Mongo_oM1</AssemblyName>
+    <RootNamespace>Mongo_oM</RootNamespace>
+    <AssemblyName>Mongo_oM</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
