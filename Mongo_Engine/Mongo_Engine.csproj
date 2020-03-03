@@ -64,23 +64,23 @@
   <ItemGroup>
     <Compile Include="Convert\Bson.cs" />
     <Compile Include="Convert\MongoQuery.cs" />
-    <Compile Include="Create\MongoAddField.cs" />
-    <Compile Include="Create\MongoMatchList.cs" />
-    <Compile Include="Create\MongoAbsoluteValue.cs" />
-    <Compile Include="Create\MongoAnd.cs" />
-    <Compile Include="Create\MongoClean.cs" />
-    <Compile Include="Create\MongoGroup.cs" />
-    <Compile Include="Create\MongoCrossRef.cs" />
-    <Compile Include="Create\MongoMin.cs" />
-    <Compile Include="Create\MongoProject.cs" />
-    <Compile Include="Create\MongoMax.cs" />
-    <Compile Include="Create\MongoSum.cs" />
-    <Compile Include="Create\MongoDivision.cs" />
-    <Compile Include="Create\MongoProduct.cs" />
-    <Compile Include="Create\MongoPower.cs" />
-    <Compile Include="Create\MongoSubtraction.cs" />
-    <Compile Include="Create\MongoMatchDomain.cs" />
-    <Compile Include="Create\MongoListItem.cs" />
+    <Compile Include="Compute\MongoAddField.cs" />
+    <Compile Include="Compute\MongoMatchList.cs" />
+    <Compile Include="Compute\MongoAbsoluteValue.cs" />
+    <Compile Include="Compute\MongoAnd.cs" />
+    <Compile Include="Compute\MongoClean.cs" />
+    <Compile Include="Compute\MongoGroup.cs" />
+    <Compile Include="Compute\MongoCrossRef.cs" />
+    <Compile Include="Compute\MongoMin.cs" />
+    <Compile Include="Compute\MongoProject.cs" />
+    <Compile Include="Compute\MongoMax.cs" />
+    <Compile Include="Compute\MongoSum.cs" />
+    <Compile Include="Compute\MongoDivision.cs" />
+    <Compile Include="Compute\MongoProduct.cs" />
+    <Compile Include="Compute\MongoPower.cs" />
+    <Compile Include="Compute\MongoSubtraction.cs" />
+    <Compile Include="Compute\MongoMatchDomain.cs" />
+    <Compile Include="Compute\MongoListItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

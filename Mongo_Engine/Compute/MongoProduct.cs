@@ -28,18 +28,20 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoSum( List<object> Operands)
+
+        public static string MongoProduct(List<object> operands)
         {
             string mongoExpression = "";
-            List<object> productArray = Operands;
-            mongoExpression = "{$sum: [" + MongoCleanVariable(productArray, mongoExpression) + "] }";
+            List<object> productArray = operands;
+            mongoExpression = "{$multiply: [" + MongoCleanVariable(productArray, mongoExpression) + "] }";
             return mongoExpression;
         }
 
+        /***************************************************/
     }
 }

@@ -28,12 +28,13 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoCrossRef(string OtherColl, List<string> Props2Match, List<string> Props2Return, string ouputname)
+
+        public static string MongoCrossRef(string otherColl, List<string> props2Match, List<string> props2Return, string ouputname)
         {
             //example mongo expression (4 main parts):
             //{$lookup: {from: "Sections Database",               let: { a: "$Bar_Number" },                 pipeline: [{$match: {$expr: {$and: [{$eq: [ "$Bar_Number",  "$$a" ] }]}}}, {project}],                 as: "holidays"}}])
@@ -50,25 +51,26 @@ namespace BH.Engine.Mongo
             string mongoExpressionF = "\"}}";
 
             //let: { a: "$Bar_Number", b: "$Force_Position" }
-            foreach (object x in Props2Match)
+            foreach (object x in props2Match)
             {
                 letstatement = letstatement + ", " + "othercollections_" +x+ ": \"$"+x+"\"";
             }
 
             //pipeline: [{$match: {$expr: {$and: [{$eq: [ "$Bar_Number",  "$$a" ] }]}}}, {project}],
             //------------------------------------                                -----           -
-            foreach (string x in Props2Match)
+            foreach (string x in props2Match)
             {
                 equalitystatement = equalitystatement + ", {$eq: [" + "\"$" + x + "\" , \"$$" + "othercollections_" + x + "\"]}";
             }
 
             //pipeline: [{$match: {$expr: {$and: [{$eq: [ "$Bar_Number",  "$$a" ] }]}}}, {project}],
             //---------------------------------------------------------------------------         -          
-            projectquery = Mongo.Create.MongoProject(Props2Return);
+            projectquery = Mongo.Compute.MongoProject(props2Return);
 
-            string aggregatecommand = mongoExpressionA + OtherColl + mongoExpressionB + letstatement.Trim(',') + mongoExpressionC + equalitystatement.Trim(',') + mongoExpressionD + projectquery + mongoExpressionE + ouputname + mongoExpressionF;
+            string aggregatecommand = mongoExpressionA + otherColl + mongoExpressionB + letstatement.Trim(',') + mongoExpressionC + equalitystatement.Trim(',') + mongoExpressionD + projectquery + mongoExpressionE + ouputname + mongoExpressionF;
             return aggregatecommand;
         }
 
+        /***************************************************/
     }
 }

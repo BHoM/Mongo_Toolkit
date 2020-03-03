@@ -28,27 +28,31 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoMax(string MongoArrayName)
+
+        public static List<string> MongoMatchList(string key, List<object> filter)
         {
-            //example mongo query:
-            //{$addFields:      {$sort : { age : -1} }
+            string projectquery = "";
+            string matchquery = "";
+            string mongolist = "";
+            string tempVar = "";
+            List<string> aggregatecommand = new List<string>();
+            mongolist = MongoCleanVariable(filter,tempVar);
+  
+             projectquery = "{$addFields: {isinfilterlist_" + key + " : {$in: [" + "\"$" + key + "\" , " + "[" + mongolist + "]] } } }"; 
+             matchquery= "{$match: { " + "isinfilterlist_" + key  + " : true} }";
 
-            string outputquery = "";
-            string mongoexpressionA = "{$max : \"$";
-            string mongoexpressionB = "\"}";
-            string maxexpression = mongoexpressionA + MongoArrayName + mongoexpressionB;
-            List<object> maxexpressionlist = new List<object>();
-            maxexpressionlist.Add(maxexpression);
-            string key = "max_" + MongoArrayName;
+            aggregatecommand.Add(projectquery);
+            aggregatecommand.Add(matchquery);
 
-            outputquery = MongoAddField(key , maxexpressionlist);
-
-            return outputquery;
+            return aggregatecommand;  
         }
+
+        /***************************************************/
     }
 }
+

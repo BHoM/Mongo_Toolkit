@@ -28,18 +28,25 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoProduct(List<object> Operands)
+
+        public static List<string> MongoMatchDomain(List<object> key, List<object> upperbound, List<object> lowerbound)
         {
-            string mongoExpression = "";
-            List<object> productArray = Operands;
-            mongoExpression = "{$multiply: [" + MongoCleanVariable(productArray, mongoExpression) + "] }";
-            return mongoExpression;
+            List<string> matchquery = new List<string>();
+            string domainexpression,matchexpression = "";
+            string tempvar = "";
+            domainexpression = "{$addFields: {matchdomain_"+ key[0].ToString() +": { $and: [ {$gte: [" + MongoCleanVariable(key, tempvar) + "," + MongoCleanVariable(lowerbound, tempvar) +"] },{$lte: [" + MongoCleanVariable(key, tempvar) + "," + MongoCleanVariable(upperbound, tempvar) + "] }] } } }";
+            matchexpression = "{$match: {matchdomain_" + key[0].ToString() + " : true} }";
+            matchquery.Add(domainexpression);
+            matchquery.Add(matchexpression);
+            return matchquery;
         }
 
+        /***************************************************/
     }
 }
+

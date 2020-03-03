@@ -28,27 +28,30 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoMin(string MongoArrayName)
+
+        public static string MongoMax(string mongoArrayName)
         {
             //example mongo query:
             //{$addFields:      {$sort : { age : -1} }
 
             string outputquery = "";
-            string mongoexpressionA = "{$min : \"$";
-            string mongoexpressionB = "\" }";
-            string maxexpression = mongoexpressionA + MongoArrayName + mongoexpressionB;
+            string mongoexpressionA = "{$max : \"$";
+            string mongoexpressionB = "\"}";
+            string maxexpression = mongoexpressionA + mongoArrayName + mongoexpressionB;
             List<object> maxexpressionlist = new List<object>();
             maxexpressionlist.Add(maxexpression);
-            string key = "min_" + MongoArrayName;
+            string key = "max_" + mongoArrayName;
 
-            outputquery = MongoAddField(key, maxexpressionlist);
+            outputquery = MongoAddField(key , maxexpressionlist);
 
             return outputquery;
         }
+
+        /***************************************************/
     }
 }

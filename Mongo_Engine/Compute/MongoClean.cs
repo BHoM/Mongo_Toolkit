@@ -28,39 +28,37 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoGroup(List<string> GroupBy, List<string> ProjectForward)
+
+        //Need to clean variable from mongo operations.  PEMDAS functions can take in ints, doubles, and strings (mongo document properties or mongo expression strings)
+        public static string MongoCleanVariable(List<object> cleanMe, string outputObject)
         {
-            //example mongo query:
-            //{$group : {_id : { Bar_Number: "$Bar_Number", Node_Number: "$Force_Position"},P: {$push: "$F_X"},My: {$push: "$M_Y"},Mz: {$push: "$M_Z"},Bar_Number: {$push: "$Bar_Number"},Node_Number: {$push: "$Force_Position"},Data_Source: {$push: "$__Key__"}}}
-            //                 ----This part is the group by portion-----------------------=================================This part is what to project forward (save on memory demand for group)=================================================================
-
-            string aggregatecommand = "";
-            string mongoExpressionA = "{$group: {_id : {";
-            string mongoExpressionB = "";
-            string mongoExpressionC = "},";
-            string mongoExpressionD = "";
-            string mongoExpressionE = " } }";
-
-            foreach (string x in GroupBy)
+            foreach (object item in cleanMe)
             {
-                mongoExpressionB = mongoExpressionB + "," + x +" : "+ " \"$" + x + "\" ";
+                /// test first to see if the item can be cast as an integer or double
+                bool testdouble = false;
+                double itemdbl = new double();
+                bool testint = false;
+                double itemint = new int();
+                testdouble = double.TryParse(item.ToString(), out itemdbl);
+                testint = double.TryParse(item.ToString(), out itemint);
+
+                if (item is double || item is int || testdouble || testint) //if you give me a number, then we'll treat it as a number
+                    outputObject = outputObject + "," + item.ToString();
+                else if (item is string && item.ToString().StartsWith("{")) //a mongo expression is a JSON object and will start with a {
+                    outputObject = outputObject + "," + item.ToString();
+                else if (item is string && !item.ToString().StartsWith("{"))
+                    outputObject = outputObject + "," + "\"$" + item.ToString() + "\""; //mongo document properties used as vairables must be preceded with a dollar sign
+                else if (item is List<object>)
+                    outputObject = MongoCleanVariable((List<object>)item, outputObject); //recursive definition to handle list of lists
             }
-
-            foreach (string x in ProjectForward)
-            {
-                mongoExpressionD = mongoExpressionD + "," + x +" : "+"{$push:"+ " \"$" + x + "\" }";
-            }
-
-            aggregatecommand = mongoExpressionA + mongoExpressionB.TrimStart(',') + mongoExpressionC + mongoExpressionD.TrimStart(',')+mongoExpressionE;
-
-            return aggregatecommand;
-
+            return outputObject.TrimStart(',');
         }
 
+        /***************************************************/
     }
 }

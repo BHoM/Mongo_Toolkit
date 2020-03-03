@@ -28,19 +28,26 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoPower(object Base, object Exponent)
+
+        public static string MongoListItem(string mongoArrayName, object index)
         {
-            string mongoExpression = "";
-            List<object> powArray = new List<object> { Base, Exponent };
-            mongoExpression = "{$pow: [" + MongoCleanVariable(powArray, mongoExpression) + "] }";
-            return mongoExpression;
+            //example mongo query:
+            //{$addFields: {stress:{$arrayElemAt:["$SectionArea.Area",0]}}}
+            string outputquery = "";
+            string mongoexpressionA = "{$arrayElemAt: [\"$";
+            string mongoexpressionB = "] }";
+
+            outputquery = mongoexpressionA + mongoArrayName + "\"," +index+ mongoexpressionB;
+
+            return outputquery;
         }
 
-
+        /***************************************************/
     }
 }
+   
