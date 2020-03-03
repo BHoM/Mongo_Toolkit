@@ -28,17 +28,20 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoSubtraction(object A, object B)
+
+        public static string MongoAnd(List<object> operands)
         {
             string mongoExpression = "";
-            List<object> SubtractVariableArray = new List<object> { A, B };
-            mongoExpression = "{$subtract: [" + MongoCleanVariable(SubtractVariableArray,mongoExpression) + "] }";
+            List<object> productArray = operands;
+            mongoExpression = "{$and: [" + MongoCleanVariable(productArray, mongoExpression) + "] }";
             return mongoExpression;
         }
+
+        /***************************************************/
     }
 }

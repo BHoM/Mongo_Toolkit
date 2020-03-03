@@ -28,23 +28,20 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoListItem(string MongoArrayName, object Index)
+
+        public static string MongoAbsVal(List<object> item)
         {
-            //example mongo query:
-            //{$addFields: {stress:{$arrayElemAt:["$SectionArea.Area",0]}}}
-            string outputquery = "";
-            string mongoexpressionA = "{$arrayElemAt: [\"$";
-            string mongoexpressionB = "] }";
-
-            outputquery = mongoexpressionA + MongoArrayName + "\"," +Index+ mongoexpressionB;
-
-            return outputquery;
+            string mongoExpression = "";
+            string tempVar = "";
+            mongoExpression = mongoExpression+","+ "{$abs:" + MongoCleanVariable(item,tempVar) + " }";
+            return mongoExpression.TrimStart(',');
         }
+
+        /***************************************************/
     }
 }
-   

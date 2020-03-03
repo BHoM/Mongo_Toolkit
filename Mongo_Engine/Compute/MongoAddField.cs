@@ -28,17 +28,27 @@ using System.Threading.Tasks;
 
 namespace BH.Engine.Mongo
 {
-    public static partial class Create
+    public static partial class Compute
     {
         /***************************************************/
         /**** Public Methods                            ****/
         /***************************************************/
-        public static string MongoAbsVal(List<object> Item)
+
+        public static string MongoAddField(string key, List<object> items)
         {
             string mongoExpression = "";
             string tempVar = "";
-            mongoExpression = mongoExpression+","+ "{$abs:" + BH.Engine.Mongo.Create.MongoCleanVariable(Item,tempVar) + " }";
-            return mongoExpression.TrimStart(',');
+            if (items.Count==1)
+            {
+                mongoExpression = "{$addFields: {" + key + " : " + MongoCleanVariable(items, tempVar) + " } }";
+            }
+            else
+            {
+                mongoExpression = "{$addFields: {" + key + " : [" + MongoCleanVariable(items, tempVar) + "] } }";
+            }
+            return mongoExpression;
         }
+
+        /***************************************************/
     }
 }
