@@ -25,6 +25,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using System.ComponentModel;
 using BH.oM.Adapter.Mongo;
+using System.Threading;
 
 namespace BH.Adapter.Mongo
 {
@@ -57,6 +58,16 @@ namespace BH.Adapter.Mongo
 
             m_Client = new MongoClient(serverName + ":" + port.ToString());
 
+            // Give it maximum 5 seconds to establish connection 
+            for (int i = 0; i < 50; i++)
+            {
+                if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                    Thread.Sleep(100);
+                else
+                    break;
+            }
+
+            // Consider the server is unavailable if connection failed after 5 seconds
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
             {
                 BH.Engine.Reflection.Compute.RecordError($"Connection to the host server {serverName} " +
@@ -93,6 +104,16 @@ namespace BH.Adapter.Mongo
             settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
             m_Client = new MongoClient(settings);
 
+            // Give it maximum 5 seconds to establish connection 
+            for (int i = 0; i < 50; i++)
+            {
+                if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
+                    Thread.Sleep(100);
+                else
+                    break;
+            }
+
+            // Consider the server is unavailable if connection failed after 5 seconds
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
             {
                 Engine.Reflection.Compute.RecordError($"Connection to the host server {settings.Server.Host} " +
