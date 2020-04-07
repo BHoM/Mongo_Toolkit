@@ -29,8 +29,8 @@ namespace BH.oM.Adapter.Mongo
     public class MongoConfig : ActionConfig
     {
         [Description("Replace the content while actioning Execute.")]
-        public bool Replace { get; set; } = false;
-        public string Tag { get; set; } = "";
+        public virtual bool Replace { get; set; } = false;
+        public virtual string Tag { get; set; } = "";
     }
 }
 
