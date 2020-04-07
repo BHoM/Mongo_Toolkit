@@ -30,9 +30,9 @@ namespace BH.oM.Mongo.Commands
     public class Transfer : IExecuteCommand
     {
         [Description("This has to be a MongoAdapter instance.")]
-        public object Destination { get; set; }
+        public virtual object Destination { get; set; }
 
-        public bool ReplaceContent { get; set; } = false;
+        public virtual bool ReplaceContent { get; set; } = false;
     }
 }
 
