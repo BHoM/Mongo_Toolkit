@@ -117,7 +117,8 @@
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetDir)$(TargetFileName)"  "C:\ProgramData\BHoM\Assemblies" /Y
 xcopy "$(TargetDir)MongoDB.Bson.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
-</PostBuildEvent>
+xcopy "$(TargetDir)MongoDB.Driver.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "$(TargetDir)MongoDB.Driver.Core.dll"  "C:\ProgramData\BHoM\Assemblies" /Y</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
