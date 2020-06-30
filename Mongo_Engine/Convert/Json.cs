@@ -21,6 +21,7 @@
  */
 
 using MongoDB.Bson;
+using MongoDB.Bson.IO;
 using System;
 
 
@@ -32,32 +33,22 @@ namespace BH.Engine.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        public static BsonDocument ToBson(object obj, string tag, DateTime timestamp)
+        public static string ToJson(object obj, string tag)
         {
-            BsonDocument document = Engine.Serialiser.Convert.ToBson(obj);
-            document["__Tag__"] = tag;
-            document["__Time__"] = timestamp;
+            BsonDocument doc = ToBson(obj, tag);
 
-            return document;
+            var jsonWriterSettings = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
+            return doc.ToJson<BsonDocument>(jsonWriterSettings);
         }
 
-        /*******************************************/
+        /***************************************************/
 
-        public static BsonDocument ToBson(object obj, string tag)
+        public static string ToJson(object obj, string tag, DateTime timestamp)
         {
-            BsonDocument document = Engine.Serialiser.Convert.ToBson(obj);
-            document["__Tag__"] = tag;
+            BsonDocument doc = ToBson(obj, tag, timestamp);
 
-            return document;
-        }
-
-        /*******************************************/
-
-        public static object FromBson(BsonDocument document)
-        {
-            document.Remove("__Tag__");
-            document.Remove("__Time__");
-            return Engine.Serialiser.Convert.FromBson(document);
+            var jsonWriterSettings = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
+            return doc.ToJson<BsonDocument>(jsonWriterSettings);
         }
 
         /***************************************************/

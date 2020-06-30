@@ -62,6 +62,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Convert\Json.cs" />
     <Compile Include="Convert\Bson.cs" />
     <Compile Include="Convert\MongoQuery.cs" />
     <Compile Include="Compute\MongoAddField.cs" />
