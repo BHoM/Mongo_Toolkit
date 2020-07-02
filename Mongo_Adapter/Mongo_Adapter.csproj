@@ -132,9 +132,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetDir)$(TargetFileName)"  "C:\ProgramData\BHoM\Assemblies" /Y
-xcopy "$(TargetDir)MongoDB.Bson.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
-xcopy "$(TargetDir)MongoDB.Driver.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
-xcopy "$(TargetDir)MongoDB.Driver.Core.dll"  "C:\ProgramData\BHoM\Assemblies" /Y</PostBuildEvent>
+xcopy "$(TargetDir)*.dll"  "C:\ProgramData\BHoM\Assemblies" /Y</PostBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\MongoDB.Libmongocrypt.1.0.0\build\MongoDB.Libmongocrypt.targets" Condition="Exists('..\packages\MongoDB.Libmongocrypt.1.0.0\build\MongoDB.Libmongocrypt.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
