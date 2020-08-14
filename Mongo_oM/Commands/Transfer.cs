@@ -24,7 +24,7 @@ using BH.oM.Adapter;
 using System;
 using System.ComponentModel;
 
-namespace BH.oM.Adapters.Mongo
+namespace BH.oM.Adapters.Mongo.Commands
 {
     [Description("Used to instruct Mongo to transfer from a database to another.")]
     public class Transfer : IExecuteCommand
