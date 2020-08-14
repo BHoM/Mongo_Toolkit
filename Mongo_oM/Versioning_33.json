@@ -1,0 +1,17 @@
+{
+    "Namespace": {
+        "ToNew": {
+            "BH.oM.Adapter.Mongo": "BH.oM.Adapters.Mongo",
+            "BH.oM.Adapter.Mongo.Commands": "BH.oM.Adapters.Mongo.Commands"
+        },
+        "ToOld": {
+            "BH.oM.Adapters.Mongo": "BH.oM.Adapter.Mongo"
+        }
+    },
+    "Type": {
+        "ToNew": {
+        },
+        "ToOld": {
+        }
+    }
+}
