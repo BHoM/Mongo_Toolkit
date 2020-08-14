@@ -28,7 +28,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using BH.oM.Data.Requests;
 using BH.oM.Adapter;
-using BH.oM.Adapter.Mongo;
+using BH.oM.Adapters.Mongo;
 
 namespace BH.Adapter.Mongo
 {
