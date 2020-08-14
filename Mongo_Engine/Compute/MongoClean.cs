@@ -26,7 +26,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BH.Engine.Mongo
+namespace BH.Engine.Adapters.Mongo
 {
     public static partial class Compute
     {

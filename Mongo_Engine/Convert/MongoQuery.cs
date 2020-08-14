@@ -24,7 +24,7 @@ using BH.oM.Data.Requests;
 using MongoDB.Bson;
 using System.Linq;
 
-namespace BH.Engine.Mongo
+namespace BH.Engine.Adapters.Mongo
 {
     public static partial class Convert
     {
