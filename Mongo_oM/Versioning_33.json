@@ -1,8 +1,7 @@
 {
     "Namespace": {
         "ToNew": {
-            "BH.oM.Adapter.Mongo": "BH.oM.Adapters.Mongo",
-            "BH.oM.Adapter.Mongo.Commands": "BH.oM.Adapters.Mongo.Commands"
+            "BH.oM.Adapter.Mongo": "BH.oM.Adapters.Mongo"
         },
         "ToOld": {
             "BH.oM.Adapters.Mongo": "BH.oM.Adapter.Mongo"
