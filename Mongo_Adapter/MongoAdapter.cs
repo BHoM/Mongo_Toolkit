@@ -117,7 +117,7 @@ namespace BH.Adapter.Mongo
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
             {
                 Engine.Reflection.Compute.RecordError($"Connection to the host server {settings.Server.Host} " +
-                    $"on port {settings.Server.Port} failed using credentials {settings.Credentials}");
+                    $"on port {settings.Server.Port} failed using credentials {settings.Credential}");
                 return;
             }
 
@@ -138,6 +138,9 @@ namespace BH.Adapter.Mongo
 
         public string ServerName()
         {
+            if (m_Collection == null)
+                return "";
+
             MongoServerAddress server = m_Collection.Database.Client.Settings.Server;
             return "mongodb://" + server.ToString();
         }
@@ -146,6 +149,9 @@ namespace BH.Adapter.Mongo
 
         public string DatabaseName()
         {
+            if (m_Collection == null)
+                return "";
+
             return m_Collection.Database.DatabaseNamespace.DatabaseName; 
         }
 
@@ -153,9 +159,18 @@ namespace BH.Adapter.Mongo
 
         public string CollectionName()
         {
+            if (m_Collection == null)
+                return "";
+
             return m_Collection.CollectionNamespace.CollectionName; 
         }
 
+        /*******************************************/
+
+        public bool IsConnected()
+        {
+            return m_Client != null && m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Connected;
+        }
 
         /***************************************************/
         /**** Private Fields                            ****/
