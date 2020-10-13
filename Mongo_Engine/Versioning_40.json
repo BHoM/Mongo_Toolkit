@@ -1,0 +1,21 @@
+﻿{
+  "Namespace": {
+    "ToNew": {
+      "BH.Engine.Mongo": "BH.Engine.Adapters.Mongo"
+    },
+    "ToOld": {
+    }
+  },
+  "Type": {
+    "ToNew": {
+    },
+    "ToOld": {
+    }
+  },
+  "Property": {
+    "ToNew": {
+    },
+    "ToOld": {
+    }
+  }
+}

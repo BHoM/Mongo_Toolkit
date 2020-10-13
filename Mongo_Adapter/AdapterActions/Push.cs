@@ -28,7 +28,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using BH.oM.Data.Requests;
 using BH.oM.Adapter;
-using BH.oM.Adapter.Mongo;
+using BH.oM.Adapters.Mongo;
 
 namespace BH.Adapter.Mongo
 {
@@ -55,7 +55,7 @@ namespace BH.Adapter.Mongo
 
             // Create the bulk query for the object to replace/insert
             DateTime timestamp = DateTime.Now;
-            IEnumerable<BsonDocument> documents = objects.Select(x => Engine.Mongo.Convert.ToBson(x, tag, timestamp));
+            IEnumerable<BsonDocument> documents = objects.Select(x => Engine.Adapters.Mongo.Convert.ToBson(x, tag, timestamp));
             if (replace)
             {
                 List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();

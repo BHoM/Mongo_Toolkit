@@ -24,7 +24,6 @@ using BH.oM.Reflection.Attributes;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.ComponentModel;
-using BH.oM.Adapter.Mongo;
 using System.Threading;
 
 namespace BH.Adapter.Mongo
