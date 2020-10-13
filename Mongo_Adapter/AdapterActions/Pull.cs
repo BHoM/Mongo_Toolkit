@@ -26,7 +26,7 @@ using System.Linq;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using BH.oM.Data.Requests;
-using BH.Engine.Mongo;
+using BH.Engine.Adapters.Mongo;
 using BH.oM.Adapter;
 
 namespace BH.Adapter.Mongo
@@ -53,7 +53,7 @@ namespace BH.Adapter.Mongo
             List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
 
             // Return as objects
-            return result.Select(x => Engine.Mongo.Convert.FromBson(x)).ToList<object>();
+            return result.Select(x => Engine.Adapters.Mongo.Convert.FromBson(x)).ToList<object>();
         }
 
 

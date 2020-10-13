@@ -24,7 +24,7 @@ using BH.oM.Adapter;
 using System;
 using System.ComponentModel;
 
-namespace BH.oM.Adapter.Mongo
+namespace BH.oM.Adapters.Mongo
 {
     public class MongoConfig : ActionConfig
     {

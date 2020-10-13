@@ -23,9 +23,7 @@
 using System;
 using System.Collections.Generic;
 using BH.oM.Adapter;
-using BH.oM.Adapter.Commands;
-using BH.oM.Adapter.Mongo;
-using BH.oM.Mongo.Commands;
+using BH.oM.Adapters.Mongo.Commands;
 using BH.oM.Reflection;
 using MongoDB.Bson;
 using MongoDB.Driver;

@@ -23,7 +23,7 @@
 using System.Collections.Generic;
 using MongoDB.Driver;
 using BH.oM.Data.Requests;
-using BH.Engine.Mongo;
+using BH.Engine.Adapters.Mongo;
 using MongoDB.Bson;
 using BH.oM.Adapter;
 
