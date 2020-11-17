@@ -40,7 +40,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Data_oM">
-      <HintPath>..\..\..\..\..\..\ProgramData\BHoM\Assemblies\Data_oM.dll</HintPath>
+      <HintPath>C:\ProgramData\BHoM\Assemblies\Data_oM.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

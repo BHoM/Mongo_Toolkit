@@ -48,18 +48,18 @@ namespace BH.Adapter.Mongo
             List<BsonDocument> pipeline = new List<BsonDocument>();
 
             if (query is CollectionNames)
-                if (m_Database == null)
-                    return null;
-                else
+            {
+                List<string> collectionNames = new List<string>();
+                if (m_Database != null)
                 {
-                    List<string> collectionNames = new List<string>();
-                    foreach (BsonDocument collectionName in m_Database.ListCollectionsAsync().Result.ToListAsync<BsonDocument>().Result)
+                    foreach (BsonDocument doc in m_Database.ListCollectionsAsync().Result.ToListAsync<BsonDocument>().Result)
                     {
-                        string name = collectionName["name"].AsString;
-                        collectionNames.Add(name);
+                        if (doc.Contains("name"))
+                            collectionNames.Add(doc["name"].AsString);
                     }
-                    return collectionNames;
                 }
+                return collectionNames;
+            }
             else if (query is BatchRequest)
                 pipeline = ((BatchRequest)query).Requests.Select(s => s.IToMongoQuery()).ToList();
             else
