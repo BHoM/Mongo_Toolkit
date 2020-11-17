@@ -28,6 +28,7 @@ using MongoDB.Driver;
 using BH.oM.Data.Requests;
 using BH.Engine.Adapters.Mongo;
 using BH.oM.Adapter;
+using BH.oM.Adapters.Mongo.Requests;
 
 namespace BH.Adapter.Mongo
 {
@@ -45,7 +46,21 @@ namespace BH.Adapter.Mongo
 
             // Get the results
             List<BsonDocument> pipeline = new List<BsonDocument>();
-            if (query is BatchRequest)
+
+            if (query is CollectionNames)
+                if (m_Database == null)
+                    return null;
+                else
+                {
+                    List<string> collectionNames = new List<string>();
+                    foreach (BsonDocument collectionName in m_Database.ListCollectionsAsync().Result.ToListAsync<BsonDocument>().Result)
+                    {
+                        string name = collectionName["name"].AsString;
+                        collectionNames.Add(name);
+                    }
+                    return collectionNames;
+                }
+            else if (query is BatchRequest)
                 pipeline = ((BatchRequest)query).Requests.Select(s => s.IToMongoQuery()).ToList();
             else
                 pipeline.Add(query.IToMongoQuery());

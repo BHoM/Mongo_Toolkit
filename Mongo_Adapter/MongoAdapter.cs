@@ -73,8 +73,8 @@ namespace BH.Adapter.Mongo
                 return;
             }
 
-            IMongoDatabase database = m_Client.GetDatabase(databaseName);
-            m_Collection = database.GetCollection<BsonDocument>(collectionName);
+            m_Database = m_Client.GetDatabase(databaseName);
+            m_Collection = m_Database.GetCollection<BsonDocument>(collectionName);
 
             if (useHistory)
             {
@@ -118,8 +118,8 @@ namespace BH.Adapter.Mongo
                 return;
             }
 
-            IMongoDatabase database = m_Client.GetDatabase(databaseName);
-            m_Collection = database.GetCollection<BsonDocument>(collectionName);
+            m_Database = m_Client.GetDatabase(databaseName);
+            m_Collection = m_Database.GetCollection<BsonDocument>(collectionName);
 
             if (useHistory)
             {
@@ -174,6 +174,7 @@ namespace BH.Adapter.Mongo
         /***************************************************/
 
         private MongoClient m_Client;
+        private IMongoDatabase m_Database;
         private IMongoCollection<BsonDocument> m_Collection = null;
         private IMongoCollection<BsonDocument> m_History = null;
 
