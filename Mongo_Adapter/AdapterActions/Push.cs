@@ -47,17 +47,7 @@ namespace BH.Adapter.Mongo
             // Create the bulk query for the object to replace/insert
             DateTime timestamp = DateTime.Now;
             IEnumerable<BsonDocument> documents = objects.Select(x => Engine.Adapters.Mongo.Convert.ToBson(x, tag, timestamp));
-
-            if (pushType == PushType.DeleteThenCreate)
-            {
-                List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
-                bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Tag__", tag)));
-                foreach (BsonDocument doc in documents)
-                    bulk.Add(new InsertOneModel<BsonDocument>(doc));
-                m_Collection.BulkWrite(bulk);
-            }
-            else
-                m_Collection.InsertMany(documents);
+            PushBson(documents, tag, pushType == PushType.DeleteThenCreate);
 
             if (pushType != PushType.AdapterDefault && pushType != PushType.DeleteThenCreate && pushType != PushType.CreateOnly)
                 BH.Engine.Base.Compute.RecordNote($"{this.GetType().Name} only supports the following {nameof(PushType)}s:" +
@@ -81,6 +71,22 @@ namespace BH.Adapter.Mongo
                 m_History.InsertMany(documents);
             }
             return objects.ToList();
+        }
+
+        /***************************************************/
+
+        private void PushBson(IEnumerable<BsonDocument> documents, string tag, bool replace)
+        {
+            if (replace)
+            {
+                List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
+                bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Tag__", tag)));
+                foreach (BsonDocument doc in documents)
+                    bulk.Add(new InsertOneModel<BsonDocument>(doc));
+                m_Collection.BulkWrite(bulk);
+            }
+            else
+                m_Collection.InsertMany(documents);
         }
 
         /***************************************************/
