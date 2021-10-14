@@ -94,9 +94,6 @@ namespace BH.Adapter.Mongo
         public MongoAdapter(string connectionString, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = false)
         {
 
-            if (!connectionString.StartsWith("mongodb://"))
-                connectionString = "mongodb://" + connectionString;
-
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
             settings.SslSettings = new SslSettings { EnabledSslProtocols = System.Security.Authentication.SslProtocols.Tls12 };
             m_Client = new MongoClient(settings);
