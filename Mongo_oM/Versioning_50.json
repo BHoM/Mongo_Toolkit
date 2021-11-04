@@ -1,0 +1,5 @@
+﻿{
+    "MessageForDeleted": {
+        "BH.oM.Adapters.Mongo.MongoConfig": "This object has been removed as its functionality is now available through the Push() inputs `PushType` and `tag`."
+    }
+}

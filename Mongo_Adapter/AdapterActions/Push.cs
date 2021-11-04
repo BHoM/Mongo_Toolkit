@@ -44,19 +44,11 @@ namespace BH.Adapter.Mongo
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
                 return new List<object>();
 
-            // Get the config
-            bool replace = true;
-            MongoConfig mongoConfig = actionConfig as MongoConfig;
-            if (mongoConfig != null)
-            {
-                tag = mongoConfig.Tag;
-                replace = mongoConfig.Replace;
-            }
-
             // Create the bulk query for the object to replace/insert
             DateTime timestamp = DateTime.Now;
             IEnumerable<BsonDocument> documents = objects.Select(x => Engine.Adapters.Mongo.Convert.ToBson(x, tag, timestamp));
-            if (replace)
+
+            if (pushType == PushType.DeleteThenCreate)
             {
                 List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
                 bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Tag__", tag)));
@@ -66,6 +58,12 @@ namespace BH.Adapter.Mongo
             }
             else
                 m_Collection.InsertMany(documents);
+
+            if (pushType != PushType.AdapterDefault && pushType != PushType.DeleteThenCreate && pushType != PushType.CreateOnly)
+                BH.Engine.Reflection.Compute.RecordNote($"{this.GetType().Name} only supports the following {nameof(PushType)}s:" +
+                    $"\n\t- {nameof(PushType.CreateOnly)} => appends content (default setting)" +
+                    $"\n\t- {nameof(PushType.DeleteThenCreate)} => replaces all content" +
+                    $"\nevery other {nameof(PushType)} will behave as {nameof(PushType.CreateOnly)}.");
 
             // Push in the history database as well
             if (m_History != null)
