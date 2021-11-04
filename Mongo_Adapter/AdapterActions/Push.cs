@@ -63,7 +63,7 @@ namespace BH.Adapter.Mongo
                 BH.Engine.Reflection.Compute.RecordNote($"{this.GetType().Name} only supports the following {nameof(PushType)}s:" +
                     $"\n\t- {nameof(PushType.CreateOnly)} => appends content (default setting)" +
                     $"\n\t- {nameof(PushType.DeleteThenCreate)} => replaces all content" +
-                    $"\nevery other {nameof(PushType)} will behave as {nameof(PushType.CreateOnly)}.");
+                    $"\nEvery other {nameof(PushType)} will behave as {nameof(PushType.CreateOnly)}.");
 
             // Push in the history database as well
             if (m_History != null)
