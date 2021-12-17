@@ -68,6 +68,19 @@ namespace BH.Adapter.Mongo
             List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
 
             // Return as objects
+            if(query is BH.oM.Adapters.Mongo.Requests.CustomRequest)
+            {
+                BH.oM.Adapters.Mongo.Requests.CustomRequest mongoCustom = query as BH.oM.Adapters.Mongo.Requests.CustomRequest;
+                switch(mongoCustom.ResultType)
+                {
+                    case Mongo_oM.Adapter.ResultType.Bhom:
+                        return result.Select(x => Engine.Adapters.Mongo.Convert.FromBson(x)).ToList<object>();
+                    case Mongo_oM.Adapter.ResultType.Bson:
+                        return result;
+                    case Mongo_oM.Adapter.ResultType.Json:
+                        return result.ConvertAll(BsonTypeMapper.MapToDotNetValue);
+                }
+            }
             return result.Select(x => Engine.Adapters.Mongo.Convert.FromBson(x)).ToList<object>();
         }
 

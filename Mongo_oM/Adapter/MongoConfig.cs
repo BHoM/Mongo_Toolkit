@@ -21,6 +21,7 @@
  */
 
 using BH.oM.Adapter;
+using Mongo_oM.Adapter;
 using System;
 using System.ComponentModel;
 
@@ -31,6 +32,8 @@ namespace BH.oM.Adapters.Mongo
         [Description("Replace the content while actioning Execute.")]
         public virtual bool Replace { get; set; } = false;
         public virtual string Tag { get; set; } = "";
+
+        public virtual ResultType ResultType { get; set; } = ResultType.Bhom;
     }
 }
 
