@@ -60,7 +60,7 @@ namespace BH.Adapter.Mongo
                 m_Collection.InsertMany(documents);
 
             if (pushType != PushType.AdapterDefault && pushType != PushType.DeleteThenCreate && pushType != PushType.CreateOnly)
-                BH.Engine.Reflection.Compute.RecordNote($"{this.GetType().Name} only supports the following {nameof(PushType)}s:" +
+                BH.Engine.Base.Compute.RecordNote($"{this.GetType().Name} only supports the following {nameof(PushType)}s:" +
                     $"\n\t- {nameof(PushType.CreateOnly)} => appends content (default setting)" +
                     $"\n\t- {nameof(PushType.DeleteThenCreate)} => replaces all content" +
                     $"\nEvery other {nameof(PushType)} will behave as {nameof(PushType.CreateOnly)}.");
