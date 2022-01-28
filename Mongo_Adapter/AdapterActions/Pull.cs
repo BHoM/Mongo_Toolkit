@@ -29,6 +29,7 @@ using BH.oM.Data.Requests;
 using BH.Engine.Adapters.Mongo;
 using BH.oM.Adapter;
 using BH.oM.Adapters.Mongo.Requests;
+using BH.oM.Adapters.Mongo;
 
 namespace BH.Adapter.Mongo
 {
@@ -40,6 +41,18 @@ namespace BH.Adapter.Mongo
 
         public override IEnumerable<object> Pull(IRequest query, PullType pullType = PullType.AdapterDefault, ActionConfig actionConfig = null)
         {
+            MongoConfig mongoConfig = new MongoConfig();
+            if(actionConfig!=null)
+            {
+                if (actionConfig is MongoConfig)
+                    mongoConfig = actionConfig as MongoConfig;
+                else
+                {
+                    BH.Engine.Base.Compute.RecordError("ActionConfig provided is not a MongoConfig.");
+                    return new List<object>();
+                }
+                    
+            }
             // Check that the link is still alive
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
                 return new List<object>();
@@ -68,20 +81,17 @@ namespace BH.Adapter.Mongo
             List<BsonDocument> result = m_Collection.Aggregate<BsonDocument>(pipeline, aggregateOptions).ToList();
 
             // Return as objects
-            if(query is BH.oM.Adapters.Mongo.Requests.CustomRequest)
+            switch (mongoConfig.ResultType)
             {
-                BH.oM.Adapters.Mongo.Requests.CustomRequest mongoCustom = query as BH.oM.Adapters.Mongo.Requests.CustomRequest;
-                switch(mongoCustom.ResultType)
-                {
-                    case Mongo_oM.Adapter.ResultType.Bhom:
-                        return result.Select(x => Engine.Adapters.Mongo.Convert.FromBson(x)).ToList<object>();
-                    case Mongo_oM.Adapter.ResultType.Bson:
-                        return result;
-                    case Mongo_oM.Adapter.ResultType.Json:
-                        return result.ConvertAll(BsonTypeMapper.MapToDotNetValue);
-                }
+                case Mongo_oM.Adapter.ResultType.Bhom:
+                    return result.Select(x => Engine.Adapters.Mongo.Convert.FromBson(x)).ToList<object>();
+                case Mongo_oM.Adapter.ResultType.Bson:
+                    return result;
+                case Mongo_oM.Adapter.ResultType.Json:
+                    return result.ConvertAll(BsonTypeMapper.MapToDotNetValue);
+                default:
+                    return result.Select(x => Engine.Adapters.Mongo.Convert.FromBson(x)).ToList<object>();
             }
-            return result.Select(x => Engine.Adapters.Mongo.Convert.FromBson(x)).ToList<object>();
         }
 
 

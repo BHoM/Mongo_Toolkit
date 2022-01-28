@@ -42,13 +42,6 @@ namespace BH.Engine.Adapters.Mongo
         /**** Private  Methods - Curves                 ****/
         /***************************************************/
 
-        public static BsonDocument ToMongoQuery(this BH.oM.Adapters.Mongo.Requests.CustomRequest query)
-        {
-            return BsonDocument.Parse(query.Body);
-        }
-
-        /***************************************************/
-
         public static BsonDocument ToMongoQuery(this CustomRequest query)
         {
             return BsonDocument.Parse(query.Body);

@@ -20,7 +20,7 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using BH.oM.Reflection.Attributes;
+using BH.oM.Base.Attributes;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.ComponentModel;
@@ -68,7 +68,7 @@ namespace BH.Adapter.Mongo
             // Consider the server is unavailable if connection failed after 5 seconds
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
             {
-                BH.Engine.Reflection.Compute.RecordError($"Connection to the host server {serverName} " +
+                BH.Engine.Base.Compute.RecordError($"Connection to the host server {serverName} " +
                     $"on port {port} failed");
                 return;
             }
@@ -113,7 +113,7 @@ namespace BH.Adapter.Mongo
             // Consider the server is unavailable if connection failed after 5 seconds
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
             {
-                Engine.Reflection.Compute.RecordError($"Connection to the host server {settings.Server.Host} " +
+                Engine.Base.Compute.RecordError($"Connection to the host server {settings.Server.Host} " +
                     $"on port {settings.Server.Port} failed using credentials {settings.Credential}");
                 return;
             }
