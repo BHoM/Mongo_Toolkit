@@ -32,7 +32,7 @@ using BH.oM.Adapters.Mongo;
 
 namespace BH.Adapter.Mongo
 {
-    public partial class MongoAdapter 
+    public partial class MongoAdapter
     {
         /***************************************************/
         /**** Public Methods                            ****/
@@ -56,13 +56,25 @@ namespace BH.Adapter.Mongo
                     bulk.Add(new InsertOneModel<BsonDocument>(doc));
                 m_Collection.BulkWrite(bulk);
             }
+            else if (pushType == PushType.UpdateOrCreateOnly)
+            {
+                var bulkOps = new List<WriteModel<BsonDocument>>();
+                foreach (BsonDocument doc in documents)
+                {
+                    var newDoc = new BsonDocument { { "$set", new BsonDocument(doc) } };
+                    var upsertOne = new UpdateOneModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Tag__", tag), newDoc) { IsUpsert = true };
+                    bulkOps.Add(upsertOne);
+                }
+                m_Collection.BulkWrite(bulkOps);
+            }
             else
                 m_Collection.InsertMany(documents);
 
-            if (pushType != PushType.AdapterDefault && pushType != PushType.DeleteThenCreate && pushType != PushType.CreateOnly)
+            if (pushType != PushType.AdapterDefault && pushType != PushType.DeleteThenCreate && pushType != PushType.CreateOnly && pushType != PushType.UpdateOrCreateOnly)
                 BH.Engine.Base.Compute.RecordNote($"{this.GetType().Name} only supports the following {nameof(PushType)}s:" +
                     $"\n\t- {nameof(PushType.CreateOnly)} => appends content (default setting)" +
                     $"\n\t- {nameof(PushType.DeleteThenCreate)} => replaces all content" +
+                    $"\n\t- {nameof(PushType.UpdateOrCreateOnly)} => upsert" +
                     $"\nEvery other {nameof(PushType)} will behave as {nameof(PushType.CreateOnly)}.");
 
             // Push in the history database as well
