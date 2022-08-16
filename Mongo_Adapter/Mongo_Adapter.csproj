@@ -133,7 +133,16 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(TargetDir)$(TargetFileName)"  "C:\ProgramData\BHoM\Assemblies" /Y
-xcopy "$(TargetDir)*.dll"  "C:\ProgramData\BHoM\Assemblies" /Y</PostBuildEvent>
+xcopy "Crc32C.NET.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "DnsClient.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "MongoDB.Bson.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "MongoDB.Driver.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "MongoDB.Driver.Core.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "SharpCompress.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "Snappy.NET.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "System.Buffers.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+xcopy "System.Runtime.InteropServices.RuntimeInformation.dll"  "C:\ProgramData\BHoM\Assemblies" /Y
+</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
