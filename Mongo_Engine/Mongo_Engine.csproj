@@ -1,34 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{5BD9B0A7-8DCA-4E18-8899-45874655EEF7}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyVersion>6.0.0.0</AssemblyVersion>
+        <Description>https://github.com/BHoM/Mongo_Toolkit</Description>
+    <Version>5.0.0</Version>
+    <Authors>BHoM</Authors>
+    <Copyright>Copyright © https://github.com/BHoM</Copyright>
+	<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
     <RootNamespace>BH.Engine.Mongo</RootNamespace>
-    <AssemblyName>Mongo_Engine</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
+    <FileVersion>6.0.0.0</FileVersion>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <OutputPath>..\Build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\Build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(TargetDir)$(TargetFileName)&quot;  &quot;C:\ProgramData\BHoM\Assemblies&quot; /Y&#xD;&#xA;xcopy &quot;$(TargetDir)MongoDB.Bson.dll&quot;  &quot;C:\ProgramData\BHoM\Assemblies&quot; /Y" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="MongoDB.Bson" Version="2.18.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <Reference Include="BHoM">
       <SpecificVersion>False</SpecificVersion>
@@ -36,6 +32,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="BHoM_Engine">
+	<SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\BHoM\Assemblies\BHoM_Engine.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -44,66 +41,15 @@
       <HintPath>C:\ProgramData\BHoM\Assemblies\Data_oM.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="MongoDB.Bson, Version=2.9.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\MongoDB.Bson.2.9.3\lib\net452\MongoDB.Bson.dll</HintPath>
-    </Reference>
     <Reference Include="Serialiser_Engine">
+	  <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\BHoM\Assemblies\Serialiser_Engine.dll</HintPath>
-      <Private>False</Private>
+	  <Private>False</Private>
     </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
+  
   <ItemGroup>
-    <Compile Include="Convert\Json.cs" />
-    <Compile Include="Convert\Bson.cs" />
-    <Compile Include="Convert\MongoQuery.cs" />
-    <Compile Include="Compute\MongoAddField.cs" />
-    <Compile Include="Compute\MongoMatchList.cs" />
-    <Compile Include="Compute\MongoAbsoluteValue.cs" />
-    <Compile Include="Compute\MongoAnd.cs" />
-    <Compile Include="Compute\MongoClean.cs" />
-    <Compile Include="Compute\MongoGroup.cs" />
-    <Compile Include="Compute\MongoCrossRef.cs" />
-    <Compile Include="Compute\MongoMin.cs" />
-    <Compile Include="Compute\MongoProject.cs" />
-    <Compile Include="Compute\MongoMax.cs" />
-    <Compile Include="Compute\MongoSum.cs" />
-    <Compile Include="Compute\MongoDivision.cs" />
-    <Compile Include="Compute\MongoProduct.cs" />
-    <Compile Include="Compute\MongoPower.cs" />
-    <Compile Include="Compute\MongoSubtraction.cs" />
-    <Compile Include="Compute\MongoMatchDomain.cs" />
-    <Compile Include="Compute\MongoListItem.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <ProjectReference Include="..\Mongo_oM\Mongo_oM.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mongo_oM\Mongo_oM.csproj">
-      <Project>{62d0b8ae-646c-46f1-8c28-1aed1ed73d54}</Project>
-      <Name>Mongo_oM</Name>
-      <Private>False</Private>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-    <None Include="Versioning_40.json" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>xcopy "$(TargetDir)$(TargetFileName)"  "C:\ProgramData\BHoM\Assemblies" /Y
-xcopy "$(TargetDir)MongoDB.Bson.dll"  "C:\ProgramData\BHoM\Assemblies" /Y</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+
 </Project>
