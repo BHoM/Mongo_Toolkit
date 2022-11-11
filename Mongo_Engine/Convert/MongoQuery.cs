@@ -22,6 +22,7 @@
 
 using BH.oM.Data.Requests;
 using MongoDB.Bson;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace BH.Engine.Adapters.Mongo
@@ -54,6 +55,8 @@ namespace BH.Engine.Adapters.Mongo
             BsonDocument document = new BsonDocument();
 
             // Define the match
+            if (query.Equalities == null)
+                query.Equalities = new Dictionary<string, object>();
             BsonDocument equalities = query.Equalities.ToBsonDocument();
 
             if (query.Type != null)

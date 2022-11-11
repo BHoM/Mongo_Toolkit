@@ -37,7 +37,7 @@ namespace BH.Engine.Adapters.Mongo
         {
             BsonDocument doc = ToBson(obj, tag);
 
-            var jsonWriterSettings = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
+            var jsonWriterSettings = new JsonWriterSettings { OutputMode = JsonOutputMode.CanonicalExtendedJson };
             return doc.ToJson<BsonDocument>(jsonWriterSettings);
         }
 
@@ -47,7 +47,7 @@ namespace BH.Engine.Adapters.Mongo
         {
             BsonDocument doc = ToBson(obj, tag, timestamp);
 
-            var jsonWriterSettings = new JsonWriterSettings { OutputMode = JsonOutputMode.Strict };
+            var jsonWriterSettings = new JsonWriterSettings { OutputMode = JsonOutputMode.CanonicalExtendedJson };
             return doc.ToJson<BsonDocument>(jsonWriterSettings);
         }
 
