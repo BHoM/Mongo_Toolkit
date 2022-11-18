@@ -32,7 +32,7 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="BHoM_Engine">
-	<SpecificVersion>False</SpecificVersion>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\BHoM\Assemblies\BHoM_Engine.dll</HintPath>
       <Private>False</Private>
     </Reference>
@@ -42,9 +42,9 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="Serialiser_Engine">
-	  <SpecificVersion>False</SpecificVersion>
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\ProgramData\BHoM\Assemblies\Serialiser_Engine.dll</HintPath>
-	  <Private>False</Private>
+      <Private>False</Private>
     </Reference>
   </ItemGroup>
   

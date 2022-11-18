@@ -51,3 +51,6 @@ using System.Runtime.InteropServices;
 
 
 
+[assembly: AssemblyVersion("6.0.0.0")]
+[assembly: AssemblyFileVersion("6.0.0.0")]
+[assembly: AssemblyDescription("https://github.com/BHoM/Mongo_Toolkit")]
