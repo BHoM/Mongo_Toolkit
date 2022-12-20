@@ -20,8 +20,10 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
+using BH.Engine.Reflection;
 using BH.oM.Data.Requests;
 using MongoDB.Bson;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,10 +59,26 @@ namespace BH.Engine.Adapters.Mongo
             // Define the match
             if (query.Equalities == null)
                 query.Equalities = new Dictionary<string, object>();
+
             BsonDocument equalities = query.Equalities.ToBsonDocument();
 
             if (query.Type != null)
-                equalities["_t"] = query.Type.ToString();
+            {
+                BsonArray typeEqualities = new BsonArray();
+
+                // Add requested type if it is not an interface
+                if (!query.Type.IsInterface)
+                    typeEqualities.Add(new BsonDocument { { "_t", query.Type.ToString() } });
+
+                // Add subtypes of the requested type
+                foreach (Type subtype in query.Type.Subtypes(false))
+                {
+                    typeEqualities.Add(new BsonDocument { { "_t", subtype.ToString() } });
+                }
+
+                equalities.Add(new BsonElement("$or", typeEqualities));
+            }
+
             if (query.Tag != "")
                 equalities["__Tag__"] = query.Tag;
 
