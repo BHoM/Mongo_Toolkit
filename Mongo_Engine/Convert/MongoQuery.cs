@@ -71,7 +71,7 @@ namespace BH.Engine.Adapters.Mongo
                     typeEqualities.Add(new BsonDocument { { "_t", query.Type.ToString() } });
 
                 // Add subtypes of the requested type
-                foreach (Type subtype in query.Type.Subtypes(false))
+                foreach (Type subtype in query.Type.Subtypes())
                 {
                     typeEqualities.Add(new BsonDocument { { "_t", subtype.ToString() } });
                 }
