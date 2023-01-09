@@ -21,10 +21,12 @@
  */
 
 using BH.Engine.Reflection;
+using BH.oM.Base.Attributes;
 using BH.oM.Data.Requests;
 using MongoDB.Bson;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace BH.Engine.Adapters.Mongo
@@ -32,9 +34,12 @@ namespace BH.Engine.Adapters.Mongo
     public static partial class Convert
     {
         /***************************************************/
-        /**** Public Interface                           ****/
+        /**** Public Interface                          ****/
         /***************************************************/
 
+        [Description("Converts a given IRequest into Bson document.")]
+        [Input("query", "Request to be converted to a Bson document.")]
+        [Output("document", "Bson document that resulted from converting the input request.")]
         public static BsonDocument IToMongoQuery(this IRequest query)
         {
             return ToMongoQuery(query as dynamic);
@@ -42,9 +47,12 @@ namespace BH.Engine.Adapters.Mongo
 
 
         /***************************************************/
-        /**** Private  Methods - Curves                 ****/
+        /**** Public Methods                            ****/
         /***************************************************/
 
+        [Description("Converts a given CustomRequest into Bson document.")]
+        [Input("query", "Request to be converted to a Bson document.")]
+        [Output("document", "Bson document that resulted from converting the input request.")]
         public static BsonDocument ToMongoQuery(this CustomRequest query)
         {
             return BsonDocument.Parse(query.Body);
@@ -52,6 +60,9 @@ namespace BH.Engine.Adapters.Mongo
 
         /***************************************************/
 
+        [Description("Converts a given FilterRequest into Bson document.")]
+        [Input("query", "Request to be converted to a Bson document.")]
+        [Output("document", "Bson document that resulted from converting the input request.")]
         public static BsonDocument ToMongoQuery(this FilterRequest query)
         {
             BsonDocument document = new BsonDocument();
@@ -89,6 +100,9 @@ namespace BH.Engine.Adapters.Mongo
 
         /***************************************************/
 
+        [Description("Converts a given IResultRequest into Bson document.")]
+        [Input("query", "Request to be converted to a Bson document.")]
+        [Output("document", "Bson document that resulted from converting the input request.")]
         public static BsonDocument ToMongoQuery(this IResultRequest query)
         {
             BsonDocument document = new BsonDocument();
@@ -115,6 +129,8 @@ namespace BH.Engine.Adapters.Mongo
         }
 
 
+        /***************************************************/
+        /**** Fallback Methods                          ****/
         /***************************************************/
 
         private static BsonDocument ToMongoQuery(this IRequest query)
