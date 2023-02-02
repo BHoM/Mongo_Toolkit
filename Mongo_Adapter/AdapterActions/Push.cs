@@ -44,9 +44,15 @@ namespace BH.Adapter.Mongo
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
                 return new List<object>();
 
+            // Make sure only BHoM objects are pushed
+            List<object> objectsAsList = objects.ToList();
+            List<IBHoMObject> bhomObjects = objects.OfType<IBHoMObject>().ToList();
+            if (objectsAsList.Count != bhomObjects.Count)
+                BH.Engine.Base.Compute.RecordError($"Mongo_Adapter only supports types that inherit from {typeof(IBHoMObject).Name}. {objectsAsList.Count - bhomObjects.Count} objects were skipped.");
+
             // Create the bulk query for the object to replace/insert
             DateTime timestamp = DateTime.Now;
-            IEnumerable<BsonDocument> documents = objects.Select(x => Engine.Adapters.Mongo.Convert.ToBson(x, tag, timestamp));
+            List<BsonDocument> documents = bhomObjects.Select(x => Engine.Adapters.Mongo.Convert.ToBson(x, tag, timestamp)).ToList();
 
             if (pushType == PushType.DeleteThenCreate)
             {
@@ -59,10 +65,11 @@ namespace BH.Adapter.Mongo
             else if (pushType == PushType.UpdateOrCreateOnly)
             {
                 var bulkOps = new List<WriteModel<BsonDocument>>();
-                foreach (BsonDocument doc in documents)
+                for (int i = 0; i < bhomObjects.Count; i++)
                 {
-                    var newDoc = new BsonDocument { { "$set", new BsonDocument(doc) } };
-                    var upsertOne = new UpdateOneModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Tag__", tag), newDoc) { IsUpsert = true };
+                    var newDoc = new BsonDocument { { "$set", new BsonDocument(documents[i]) } };
+                    string guid = bhomObjects[i].BHoM_Guid.ToString();
+                    var upsertOne = new UpdateOneModel<BsonDocument>(Builders<BsonDocument>.Filter.And(Builders<BsonDocument>.Filter.Eq("BHoM_Guid", guid), Builders<BsonDocument>.Filter.Eq("__Tag__", tag)), newDoc) { IsUpsert = true };
                     bulkOps.Add(upsertOne);
                 }
                 m_Collection.BulkWrite(bulkOps);
