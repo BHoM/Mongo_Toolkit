@@ -48,7 +48,7 @@ namespace BH.Adapter.Mongo
         [Input("collectionName", "name of the collection you want to access inside that database")]
         [Input("useHistory", "If true, will store a copy of the data pushed to Mongo in a separate collection. Data from the last 5 pushes is available there")]
         [Output("adapter", "Adapter to Mongo Database")]
-        public MongoAdapter(string serverName = "mongodb://localhost", int port = 27017, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = true)
+        public MongoAdapter(string serverName = "mongodb://localhost", int port = 27017, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = true, string indexField = "")
         {
 
             if (!serverName.StartsWith("mongodb://"))
@@ -81,6 +81,8 @@ namespace BH.Adapter.Mongo
                 IMongoDatabase hist_Database = m_Client.GetDatabase(databaseName + "_History");
                 m_History = hist_Database.GetCollection<BsonDocument>(collectionName);
             }
+
+            m_IndexField = indexField;
         }
 
         /***************************************************/
@@ -91,7 +93,7 @@ namespace BH.Adapter.Mongo
         [Input("collectionName", "name of the collection you want to access inside that database")]
         [Input("useHistory", "If true, will store a copy of the data pushed to Mongo in a separate collection. Data from the last 5 pushes is available there")]
         [Output("adapter", "Adapter to Mongo Database")]
-        public MongoAdapter(string connectionString, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = false)
+        public MongoAdapter(string connectionString, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = false, string indexField = "")
         {
 
             MongoClientSettings settings = MongoClientSettings.FromUrl(new MongoUrl(connectionString));
@@ -123,6 +125,8 @@ namespace BH.Adapter.Mongo
                 IMongoDatabase hist_Database = m_Client.GetDatabase(databaseName + "_History");
                 m_History = hist_Database.GetCollection<BsonDocument>(collectionName);
             }
+
+            m_IndexField = indexField;
         }
 
 
@@ -174,6 +178,7 @@ namespace BH.Adapter.Mongo
         private IMongoDatabase m_Database;
         private IMongoCollection<BsonDocument> m_Collection = null;
         private IMongoCollection<BsonDocument> m_History = null;
+        private string m_IndexField = "";
 
 
         /***************************************************/

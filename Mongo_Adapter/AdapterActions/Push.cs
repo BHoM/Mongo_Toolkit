@@ -29,6 +29,7 @@ using MongoDB.Driver;
 using BH.oM.Data.Requests;
 using BH.oM.Adapter;
 using BH.oM.Adapters.Mongo;
+using System.Runtime.CompilerServices;
 
 namespace BH.Adapter.Mongo
 {
@@ -51,9 +52,11 @@ namespace BH.Adapter.Mongo
             if (pushType == PushType.DeleteThenCreate)
             {
                 List<WriteModel<BsonDocument>> bulk = new List<WriteModel<BsonDocument>>();
-                bulk.Add(new DeleteManyModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Tag__", tag)));
                 foreach (BsonDocument doc in documents)
+                {
+                    bulk.Add(new DeleteOneModel<BsonDocument>(EqualityFilter(doc, Builders<BsonDocument>.Filter, tag)));
                     bulk.Add(new InsertOneModel<BsonDocument>(doc));
+                }
                 m_Collection.BulkWrite(bulk);
             }
             else if (pushType == PushType.UpdateOrCreateOnly)
@@ -62,7 +65,18 @@ namespace BH.Adapter.Mongo
                 foreach (BsonDocument doc in documents)
                 {
                     var newDoc = new BsonDocument { { "$set", new BsonDocument(doc) } };
-                    var upsertOne = new UpdateOneModel<BsonDocument>(Builders<BsonDocument>.Filter.Eq("__Tag__", tag), newDoc) { IsUpsert = true };
+                    var upsertOne = new UpdateOneModel<BsonDocument>(EqualityFilter(doc, Builders<BsonDocument>.Filter, tag), newDoc) { IsUpsert = true };
+                    bulkOps.Add(upsertOne);
+                }
+                m_Collection.BulkWrite(bulkOps);
+            }
+            else if (pushType == PushType.CreateNonExisting)
+            {
+                var bulkOps = new List<WriteModel<BsonDocument>>();
+                foreach (BsonDocument doc in documents)
+                {
+                    var newDoc = new BsonDocument { { "$setOnInsert", new BsonDocument(doc) } };
+                    var upsertOne = new UpdateOneModel<BsonDocument>(EqualityFilter(doc, Builders<BsonDocument>.Filter, tag), newDoc) { IsUpsert = true };
                     bulkOps.Add(upsertOne);
                 }
                 m_Collection.BulkWrite(bulkOps);
@@ -93,6 +107,14 @@ namespace BH.Adapter.Mongo
                 m_History.InsertMany(documents);
             }
             return objects.ToList();
+        }
+
+        private FilterDefinition<BsonDocument> EqualityFilter(BsonDocument doc, FilterDefinitionBuilder<BsonDocument> builder, string tag)
+        {
+            if (!string.IsNullOrWhiteSpace(m_IndexField))
+                return builder.And(builder.Eq("__Tag__", tag), builder.Eq(m_IndexField, doc[m_IndexField]));
+            else
+                return builder.Eq("__Tag__", tag);
         }
 
         /***************************************************/
