@@ -53,7 +53,7 @@ namespace BH.Engine.Adapters.Mongo
 
         /*******************************************/
 
-        public static object FromBson(BsonDocument document)
+        public static object FromBson(this BsonDocument document)
         {
             document.Remove("__Tag__");
             document.Remove("__Time__");
