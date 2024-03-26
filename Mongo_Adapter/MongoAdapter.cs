@@ -41,13 +41,13 @@ namespace BH.Adapter.Mongo
         /**** Constructors                              ****/
         /***************************************************/
 
-        [Description("Create an adapter to a Mongo database. Use this constructor if you have the name of the server hosting the database and its port number")]
-        [Input("serverName", "address of the server hosting the database. Will generally start with \"mongodb://\"")]
-        [Input("port", "port number used to access the database. This will generally be the number after the ':' at the end of the address of the database")]
-        [Input("databaseName", "name of the database itself")]
-        [Input("collectionName", "name of the collection you want to access inside that database")]
-        [Input("useHistory", "If true, will store a copy of the data pushed to Mongo in a separate collection. Data from the last 5 pushes is available there")]
-        [Output("adapter", "Adapter to Mongo Database")]
+        [Description("Create an adapter to a Mongo database. Use this constructor if you have the name of the server hosting the database and its port number.")]
+        [Input("serverName", "address of the server hosting the database. Will generally start with \"mongodb://\".")]
+        [Input("port", "port number used to access the database. This will generally be the number after the ':' at the end of the address of the database.")]
+        [Input("databaseName", "name of the database itself.")]
+        [Input("collectionName", "name of the collection you want to access inside that database.")]
+        [Input("useHistory", "If true, will store a copy of the data pushed to Mongo in a separate collection. Data from the last 5 pushes is available there.")]
+        [Output("adapter", "Adapter to Mongo Database.")]
         public MongoAdapter(string serverName = "mongodb://localhost", int port = 27017, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = true)
         {
 
@@ -85,12 +85,12 @@ namespace BH.Adapter.Mongo
 
         /***************************************************/
 
-        [Description("Create an adapter to a Mongo database. Use this constructor if you have a single long string representing the location of your database (and potentially identification)")]
-        [Input("connectionString", "Text given to you to access the database. Will generally start with \"mongodb://\"")]
-        [Input("databaseName", "name of the database itself")]
-        [Input("collectionName", "name of the collection you want to access inside that database")]
-        [Input("useHistory", "If true, will store a copy of the data pushed to Mongo in a separate collection. Data from the last 5 pushes is available there")]
-        [Output("adapter", "Adapter to Mongo Database")]
+        [Description("Create an adapter to a Mongo database. Use this constructor if you have a single long string representing the location of your database (and potentially identification).")]
+        [Input("connectionString", "Text given to you to access the database. Will generally start with \"mongodb://\".")]
+        [Input("databaseName", "name of the database itself.")]
+        [Input("collectionName", "name of the collection you want to access inside that database.")]
+        [Input("useHistory", "If true, will store a copy of the data pushed to Mongo in a separate collection. Data from the last 5 pushes is available there.")]
+        [Output("adapter", "Adapter to Mongo Database.")]
         public MongoAdapter(string connectionString, string databaseName = "project", string collectionName = "bhomObjects", bool useHistory = false)
         {
 
