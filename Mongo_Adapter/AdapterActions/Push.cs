@@ -1,6 +1,6 @@
 /*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2023, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2024, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -44,6 +44,18 @@ namespace BH.Adapter.Mongo
             if (m_Client.Cluster.Description.State == MongoDB.Driver.Core.Clusters.ClusterState.Disconnected)
                 return new List<object>();
 
+            // Make sure that the push type is supported
+            if (pushType != PushType.AdapterDefault && pushType != PushType.DeleteThenCreate && pushType != PushType.CreateOnly && pushType != PushType.UpdateOrCreateOnly)
+            {
+                BH.Engine.Base.Compute.RecordError($"{this.GetType().Name} only supports the following {nameof(PushType)}s:" +
+                    $"\n\t- {nameof(PushType.CreateOnly)} => appends content (default setting)" +
+                    $"\n\t- {nameof(PushType.DeleteThenCreate)} => replaces all content" +
+                    $"\n\t- {nameof(PushType.UpdateOrCreateOnly)} => upsert" +
+                    $"\nEvery other {nameof(PushType)} will behave as {nameof(PushType.CreateOnly)}.");
+
+                return new List<object>();
+            }
+                
             // Create the bulk query for the object to replace/insert
             DateTime timestamp = DateTime.Now;
             IEnumerable<BsonDocument> documents = objects.Select(x => Engine.Adapters.Mongo.Convert.ToBson(x, tag, timestamp));
@@ -70,13 +82,6 @@ namespace BH.Adapter.Mongo
             else
                 m_Collection.InsertMany(documents);
 
-            if (pushType != PushType.AdapterDefault && pushType != PushType.DeleteThenCreate && pushType != PushType.CreateOnly && pushType != PushType.UpdateOrCreateOnly)
-                BH.Engine.Base.Compute.RecordNote($"{this.GetType().Name} only supports the following {nameof(PushType)}s:" +
-                    $"\n\t- {nameof(PushType.CreateOnly)} => appends content (default setting)" +
-                    $"\n\t- {nameof(PushType.DeleteThenCreate)} => replaces all content" +
-                    $"\n\t- {nameof(PushType.UpdateOrCreateOnly)} => upsert" +
-                    $"\nEvery other {nameof(PushType)} will behave as {nameof(PushType.CreateOnly)}.");
-
             // Push in the history database as well
             if (m_History != null)
             {
@@ -98,6 +103,7 @@ namespace BH.Adapter.Mongo
         /***************************************************/
     }
 }
+
 
 
 
