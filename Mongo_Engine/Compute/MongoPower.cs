@@ -33,13 +33,13 @@ namespace BH.Engine.Adapters.Mongo
         /***************************************************/
 
         [Description("Creates a MongoDB aggregation expression that raises the base to the power of the exponent.")]
-        [Input("base", "The base value or MongoDB field reference.")]
+        [Input("baseValue", "The base value or MongoDB field reference.")]
         [Input("exponent", "The exponent value or MongoDB field reference.")]
         [Output("mongoExpression", "A MongoDB $pow aggregation expression string.")]
-        public static string MongoPower(object @base, object exponent)
+        public static string MongoPower(object baseValue, object exponent)
         {
             string mongoExpression = "";
-            List<object> powArray = new List<object> { @base, exponent };
+            List<object> powArray = new List<object> { baseValue, exponent };
             mongoExpression = "{$pow: [" + MongoCleanVariable(powArray, mongoExpression) + "] }";
             return mongoExpression;
         }
