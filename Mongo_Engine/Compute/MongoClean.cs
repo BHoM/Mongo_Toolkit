@@ -20,11 +20,9 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
+using BH.oM.Base.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BH.Engine.Adapters.Mongo
 {
@@ -34,7 +32,11 @@ namespace BH.Engine.Adapters.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
-        //Need to clean variable from mongo operations.  PEMDAS functions can take in ints, doubles, and strings (mongo document properties or mongo expression strings)
+        [Description("Cleans and formats a list of variables for use in MongoDB aggregation expressions. \n" +
+            "Handles integers, doubles, document field references, existing MongoDB expression strings, and nested lists recursively.")]
+        [Input("cleanMe", "List of values to clean and format. Accepts integers, doubles, strings (field references or existing expressions), and nested lists.")]
+        [Input("outputObject", "Accumulator string to which the cleaned variable representations are appended.")]
+        [Output("mongoExpression", "A comma-separated string of cleaned MongoDB variable representations, with a leading comma trimmed.")]
         public static string MongoCleanVariable(List<object> cleanMe, string outputObject)
         {
             foreach (object item in cleanMe)

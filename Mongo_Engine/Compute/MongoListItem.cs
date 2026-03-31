@@ -20,11 +20,9 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
+using BH.oM.Base.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BH.Engine.Adapters.Mongo
 {
@@ -34,6 +32,10 @@ namespace BH.Engine.Adapters.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
+        [Description("Creates a MongoDB aggregation expression that retrieves an element from an array field at the specified index using $arrayElemAt.")]
+        [Input("mongoArrayName", "The name of the MongoDB document array field to retrieve an element from.")]
+        [Input("index", "The zero-based index of the element to retrieve from the array.")]
+        [Output("mongoExpression", "A MongoDB $arrayElemAt aggregation expression string.")]
         public static string MongoListItem(string mongoArrayName, object index)
         {
             //example mongo query:

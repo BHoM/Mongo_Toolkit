@@ -20,11 +20,9 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
+using BH.oM.Base.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BH.Engine.Adapters.Mongo
 {
@@ -34,6 +32,10 @@ namespace BH.Engine.Adapters.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
+        [Description("Creates a MongoDB aggregation expression that raises the base to the power of the exponent.")]
+        [Input("base", "The base value or MongoDB field reference.")]
+        [Input("exponent", "The exponent value or MongoDB field reference.")]
+        [Output("mongoExpression", "A MongoDB $pow aggregation expression string.")]
         public static string MongoPower(object @base, object exponent)
         {
             string mongoExpression = "";
