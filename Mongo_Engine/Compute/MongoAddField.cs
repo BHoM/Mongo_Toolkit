@@ -20,11 +20,9 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
+using BH.oM.Base.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BH.Engine.Adapters.Mongo
 {
@@ -34,6 +32,11 @@ namespace BH.Engine.Adapters.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
+        [Description("Creates a MongoDB $addFields aggregation stage that adds a new field or overwrites an existing field with the computed value.")]
+        [Input("key", "The name of the field to add or overwrite in the document.")]
+        [Input("items", "List containing the value or expression(s) to assign to the field. \n" +
+            "A single item is assigned directly; multiple items are assigned as an array.")]
+        [Output("mongoExpression", "A MongoDB $addFields aggregation stage string.")]
         public static string MongoAddField(string key, List<object> items)
         {
             string mongoExpression = "";
