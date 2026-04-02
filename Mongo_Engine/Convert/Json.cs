@@ -1,6 +1,6 @@
 /*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2025, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2026, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -20,9 +20,11 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
+using BH.oM.Base.Attributes;
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using System;
+using System.ComponentModel;
 
 
 namespace BH.Engine.Adapters.Mongo
@@ -33,6 +35,10 @@ namespace BH.Engine.Adapters.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
+        [Description("Converts a BHoM object to a JSON string, stamped with a tag.")]
+        [Input("obj", "The object to serialise to JSON.")]
+        [Input("tag", "A string tag to associate with the document, stored under the '__Tag__' key.")]
+        [Output("json", "A JSON string representation of the object.")]
         public static string ToJson(object obj, string tag)
         {
             BsonDocument doc = ToBson(obj, tag);
@@ -43,6 +49,11 @@ namespace BH.Engine.Adapters.Mongo
 
         /***************************************************/
 
+        [Description("Converts a BHoM object to a JSON string, stamped with a tag and timestamp.")]
+        [Input("obj", "The object to serialise to JSON.")]
+        [Input("tag", "A string tag to associate with the document, stored under the '__Tag__' key.")]
+        [Input("timestamp", "The timestamp to associate with the document, stored under the '__Time__' key.")]
+        [Output("json", "A JSON string representation of the object.")]
         public static string ToJson(object obj, string tag, DateTime timestamp)
         {
             BsonDocument doc = ToBson(obj, tag, timestamp);
@@ -54,6 +65,7 @@ namespace BH.Engine.Adapters.Mongo
         /***************************************************/
     }
 }
+
 
 
 

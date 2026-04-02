@@ -1,6 +1,6 @@
 /*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2025, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2026, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -20,11 +20,9 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
+using BH.oM.Base.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BH.Engine.Adapters.Mongo
 {
@@ -34,6 +32,13 @@ namespace BH.Engine.Adapters.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
+        [Description("Creates a MongoDB $lookup aggregation stage that performs a cross-reference join between the current collection and another collection, \n" +
+            "matching on shared field names and projecting specified fields from the joined documents.")]
+        [Input("otherColl", "The name of the other MongoDB collection to join with.")]
+        [Input("props2Match", "List of field names that must match between the two collections.")]
+        [Input("props2Return", "List of field names from the joined collection to include in the output.")]
+        [Input("ouputname", "The name of the output field in the result document that will hold the joined documents.")]
+        [Output("mongoExpression", "A MongoDB $lookup aggregation stage string.")]
         public static string MongoCrossRef(string otherColl, List<string> props2Match, List<string> props2Return, string ouputname)
         {
             //example mongo expression (4 main parts):
@@ -74,6 +79,7 @@ namespace BH.Engine.Adapters.Mongo
         /***************************************************/
     }
 }
+
 
 
 

@@ -1,6 +1,6 @@
 /*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2025, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2026, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -20,11 +20,9 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
-using System;
+using BH.oM.Base.Attributes;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel;
 
 namespace BH.Engine.Adapters.Mongo
 {
@@ -34,6 +32,10 @@ namespace BH.Engine.Adapters.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
+        [Description("Creates a MongoDB aggregation expression that subtracts b from a.")]
+        [Input("a", "The minuend value or MongoDB field reference.")]
+        [Input("b", "The subtrahend value or MongoDB field reference.")]
+        [Output("mongoExpression", "A MongoDB $subtract aggregation expression string.")]
         public static string MongoSubtraction(object a, object b)
         {
             string mongoExpression = "";
@@ -45,6 +47,7 @@ namespace BH.Engine.Adapters.Mongo
         /***************************************************/
     }
 }
+
 
 
 

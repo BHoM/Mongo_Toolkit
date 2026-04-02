@@ -1,6 +1,6 @@
 /*
  * This file is part of the Buildings and Habitats object Model (BHoM)
- * Copyright (c) 2015 - 2025, the respective contributors. All rights reserved.
+ * Copyright (c) 2015 - 2026, the respective contributors. All rights reserved.
  *
  * Each contributor holds copyright over their respective contributions.
  * The project versioning (Git) records all such contribution source information.
@@ -20,8 +20,10 @@
  * along with this code. If not, see <https://www.gnu.org/licenses/lgpl-3.0.html>.      
  */
 
+using BH.oM.Base.Attributes;
 using MongoDB.Bson;
 using System;
+using System.ComponentModel;
 
 
 namespace BH.Engine.Adapters.Mongo
@@ -32,6 +34,11 @@ namespace BH.Engine.Adapters.Mongo
         /**** Public Methods                            ****/
         /***************************************************/
 
+        [Description("Converts a BHoM object to a BsonDocument and stamps it with a tag and timestamp.")]
+        [Input("obj", "The object to serialise to BSON.")]
+        [Input("tag", "A string tag to associate with the document, stored under the '__Tag__' key.")]
+        [Input("timestamp", "The timestamp to associate with the document, stored under the '__Time__' key.")]
+        [Output("document", "A BsonDocument representation of the object with tag and timestamp fields.")]
         public static BsonDocument ToBson(object obj, string tag, DateTime timestamp)
         {
             BsonDocument document = Engine.Serialiser.Convert.ToBson(obj);
@@ -43,6 +50,10 @@ namespace BH.Engine.Adapters.Mongo
 
         /*******************************************/
 
+        [Description("Converts a BHoM object to a BsonDocument and stamps it with a tag.")]
+        [Input("obj", "The object to serialise to BSON.")]
+        [Input("tag", "A string tag to associate with the document, stored under the '__Tag__' key.")]
+        [Output("document", "A BsonDocument representation of the object with a tag field.")]
         public static BsonDocument ToBson(object obj, string tag)
         {
             BsonDocument document = Engine.Serialiser.Convert.ToBson(obj);
@@ -53,6 +64,9 @@ namespace BH.Engine.Adapters.Mongo
 
         /*******************************************/
 
+        [Description("Converts a BsonDocument to a BHoM object, removing the MongoDB metadata fields '__Tag__' and '__Time__' before deserialisation.")]
+        [Input("document", "The BsonDocument to convert.")]
+        [Output("obj", "The deserialised BHoM object.")]
         public static object FromBson(this BsonDocument document)
         {
             document.Remove("__Tag__");
@@ -63,6 +77,7 @@ namespace BH.Engine.Adapters.Mongo
         /***************************************************/
     }
 }
+
 
 
 
